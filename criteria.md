@@ -42,63 +42,74 @@ Two things worth knowing before you pick numbers:
   a **miss**.
 
 ---
-## 1.
+## 1. Human writing is almost never called AI
 
-<!-- Your criterion. It must name a number. -->
+Of 10 pieces of human writing (at least 4 of them plain writing: short
+sentences, everyday words), **at most 1 gets the high-confidence AI label**, and
+that holds in **each** of 3 trials. None of the 4 plain pieces may get it in any
+trial.
 
-
-
-**Why this target:**
-
-
-
----
-
-## 2.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
+**Why this target:** a wrong accusation is the expensive mistake here, and plain
+writing is exactly what signal one mistakes for a machine. One in ten is
+already a real cost to a real person; I'd rather let AI text through than go
+higher. Zero for the plain pieces because those writers (second-language,
+younger, writing plainly on purpose) have the least room to argue back.
 
 ---
 
-## 3.
+## 2. Clearly-AI and clearly-human text score far apart
 
-<!-- Your criterion. -->
+Across 5 clearly AI-generated pieces and 5 clearly human pieces, **the mean
+combined score of the AI set is at least 0.25 higher than the mean of the
+human set**, in each of 3 trials.
 
-
-
-**Why this target:**
-
-
-
----
-
-## 4.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
+**Why this target:** a score that varies by only a few hundredths between
+obvious cases can't support three labels; the bands would be decided by
+noise. 0.25 is the width of my unsure band plus a margin, so the two groups
+can sit on opposite sides of it.
 
 ---
 
-## 5.
+## 3. All three labels are reachable, and no score falls through a gap
 
-<!-- Your criterion. -->
+(a) Sweeping the combined score from 0.00 to 1.00 in steps of 0.01 through
+`scoring.score_to_label`, **101 of 101 values map to exactly one of the three
+labels**. (b) A 9-piece set (3 AI, 3 human, 3 borderline) produces **each of the
+three labels at least once** in each of 3 trials.
 
+**Why this target:** a label that no input can reach is a label the reader
+never sees, and a gap between thresholds is a crash or a blank label waiting to
+happen. (a) checks the mapping; (b) checks that real text, not just a number I
+typed, gets there.
 
+---
 
-**Why this target:**
+## 4. Every appeal is recorded and changes status; bad appeals are refused
 
+**10 of 10** appeals against real content_ids return 200, after which
+`GET /log` shows an `appeal` entry with the writer's reasoning and
+`status: under_review` for that content_id. **3 of 3** appeals against a
+content_id that doesn't exist return 404 and write **no** appeal entry.
+**3 of 3** appeals with empty reasoning return 400.
 
+**Why this target:** the appeal is the only thing between a wrong accusation and
+nothing at all, so "most of the time" isn't good enough. It has to be all of
+them. Refusing unknown ids matters too: an appeal that says "received" for a
+typo'd id tells the writer they're being reviewed when nobody will ever look.
+
+---
+
+## 5. Bad input never crashes the service
+
+Of 7 malformed `/submit` requests (no `text` field, empty text, whitespace-only
+text, `text: null`, `text` as a number, a body that isn't a JSON object, and text
+over 20,000 characters), **0 return a 5xx**. Each returns a 4xx with a JSON
+`error` field saying what was wrong, and **7 of 7** leave a `rejected` entry
+in the audit log.
+
+**Why this target:** a crash on malformed input is one of the most common real
+failures, and the attack set will send all of these. A rejection that leaves no
+trace in the log is an attack I can't see later.
 
 ---
 
