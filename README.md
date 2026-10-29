@@ -293,11 +293,19 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
 
 ## How I Used AI
 
-**Moment 1**
+**Moment 1 — debugging `/submit`**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I put placeholders for a classmate's Step 1–4 code into
+  `submit()`, with `text = payload.get("text")` straight after reading the
+  body, and asked Claude Code to debug it and fill in the steps.
+- *What came back:* it rebuilt my version in a scratch copy and found the
+  bug: a body that isn't a JSON object (plain text, a list, a number) makes
+  `payload` something with no `.get`, so `/submit` crashed with a 500 and
+  left nothing in the audit log. It filled in the four steps with a
+  `isinstance(payload, dict)` guard in front of Step 2, and added
+  `test_bad_bodies.py`, which fails 6 of 6 on my placeholder version and
+  passes 6 of 6 on the fixed one.
+- *What I changed:* <!-- your words: what you did with it -->
 
 **Moment 2**
 
