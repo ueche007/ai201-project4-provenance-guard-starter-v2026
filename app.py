@@ -18,8 +18,9 @@ doesn't, it's the service itself.
 Routes:
 
     POST /ping        the worked example. Already works. Don't edit it
-    POST /submit      ← YOU BUILD THIS (Milestone 3, 4, 5)
-    POST /appeal      ← YOU BUILD THIS (Milestone 5)
+    POST /submit      score a piece of text and label it
+    POST /appeal      a writer disputes a label; moves it to under_review
+    GET  /content/<id>  one item's current status (stretch)
     GET  /log         the audit log. Already works
     GET  /health      is the service up, and is the model loaded
 """
@@ -30,6 +31,9 @@ from flask import Flask, jsonify, request
 
 import audit
 import config
+import detector
+import scoring
+import stylometry
 
 app = Flask(__name__)
 
@@ -136,8 +140,6 @@ def ping():
 @app.get("/health")
 def health():
     """Is the service up, and has the model been downloaded yet?"""
-    import detector
-
     loaded = detector._model is not None
     return jsonify({
         "ok": True,
@@ -199,17 +201,104 @@ def submit():
     what should this do when `text` is missing, empty, or enormous? A crash on
     a malformed input is one of the most common real failures there is.
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
 
-    # TODO: delete this and build the route.
+    # ── 1. Check the input before any model sees it ──────────────────────
+    problem = _check_submission(payload)
+    if problem:
+        status, error, message = problem
+        creator = payload.get("creator_id") if isinstance(payload, dict) else None
+        audit.log_rejection(
+            creator_id=creator if isinstance(creator, str) and creator.strip() else "unknown",
+            reason=error,
+            http_status=status,
+        )
+        return jsonify({"error": error, "message": message}), status
+
+    text = payload["text"].strip()
+    creator_id = payload["creator_id"].strip()
+    content_id = uuid.uuid4().hex[:12]
+
+    # ── 2. Signal one: how predictable the text is to a language model ───
+    try:
+        model_score = detector.model_signal(text)
+    except detector.DetectorUnavailable as exc:
+        audit.log_rejection(creator_id=creator_id, reason="detector_unavailable",
+                            http_status=503)
+        return jsonify({"error": "detector_unavailable", "message": str(exc)}), 503
+    except ValueError:
+        # Fewer than 3 tokens: nothing for the model to be surprised by.
+        audit.log_rejection(creator_id=creator_id, reason="too_short", http_status=400)
+        return jsonify({
+            "error": "too_short",
+            "message": "This is too short to look at. Send at least a sentence or two.",
+        }), 400
+
+    # ── 3. Signal two: the shape of the text ─────────────────────────────
+    style_score = stylometry.style_signal(text)
+
+    # ── 4. One number from two ───────────────────────────────────────────
+    combined = round(scoring.combine_signals(model_score, style_score), 4)
+
+    # ── 5. The number a person can read ──────────────────────────────────
+    word_count = len(stylometry.words(text))
+    guess, label = scoring.score_to_label(combined, word_count=word_count)
+
+    # ── 6. Log it, then answer ───────────────────────────────────────────
+    audit.log_decision(
+        content_id=content_id,
+        creator_id=creator_id,
+        guess=guess,
+        model_score=model_score,
+        style_score=style_score,
+        combined_score=combined,
+        label=label,
+        status="decided",
+        word_count=word_count,
+    )
+
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /submit isn't built yet — see the TODO in app.py.",
-        "you_sent": {
-            "text_length": len(payload.get("text", "")),
-            "creator_id": payload.get("creator_id"),
-        },
-    }), 501
+        "content_id": content_id,
+        "guess": guess,
+        "confidence": combined,
+        "label": label,
+        "model_score": model_score,
+        "style_score": style_score,
+        "status": "decided",
+    })
+
+
+def _check_submission(payload):
+    """
+    What's wrong with this request, if anything.
+
+    Returns None when it's fine, otherwise (http_status, error_code, message).
+    Every refusal here is a 4xx with a reason. None of them reach a model.
+    """
+    if not isinstance(payload, dict):
+        return 400, "invalid_body", (
+            'Send a JSON object like {"text": "...", "creator_id": "..."} '
+            "with Content-Type: application/json."
+        )
+
+    text = payload.get("text")
+    if "text" not in payload or text is None:
+        return 400, "missing_text", "The request needs a \"text\" field."
+    if not isinstance(text, str):
+        return 400, "invalid_text", "\"text\" has to be a string."
+    if not text.strip():
+        return 400, "empty_text", "\"text\" is empty. There's nothing to look at."
+    if len(text) > config.MAX_TEXT_CHARS:
+        return 413, "text_too_long", (
+            f"\"text\" is {len(text):,} characters. The limit is "
+            f"{config.MAX_TEXT_CHARS:,}."
+        )
+
+    creator = payload.get("creator_id")
+    if not isinstance(creator, str) or not creator.strip():
+        return 400, "missing_creator_id", "The request needs a \"creator_id\" string."
+
+    return None
 
 
 @app.post("/appeal")
@@ -232,14 +321,101 @@ def appeal():
     to the person on the other end. It's the only thing standing between a
     wrong accusation and nothing at all.
     """
-    payload = request.get_json(silent=True) or {}
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        return _refuse_appeal("unknown", 400, "invalid_body",
+                              'Send a JSON object like {"content_id": "...", "reasoning": "..."}.')
 
-    # TODO: delete this and build the route.
+    content_id = payload.get("content_id")
+    reasoning = payload.get("reasoning")
+    caller = payload.get("creator_id")
+    caller = caller.strip() if isinstance(caller, str) and caller.strip() else None
+
+    if not isinstance(content_id, str) or not content_id.strip():
+        return _refuse_appeal(caller or "unknown", 400, "missing_content_id",
+                              'The request needs a "content_id" string.')
+    content_id = content_id.strip()
+
+    if not isinstance(reasoning, str) or not reasoning.strip():
+        return _refuse_appeal(caller or "unknown", 400, "missing_reasoning",
+                              "Tell us in a sentence or two why you think we got it wrong.",
+                              content_id=content_id)
+    if len(reasoning) > config.MAX_APPEAL_CHARS:
+        return _refuse_appeal(caller or "unknown", 413, "reasoning_too_long",
+                              f"Please keep the reasoning under {config.MAX_APPEAL_CHARS:,} characters.",
+                              content_id=content_id)
+
+    # 1. Does this content_id exist? Only a real decision counts.
+    history = audit.entries_for(content_id)
+    decision = next((e for e in history if e.get("status") == "decided"), None)
+    if decision is None:
+        return _refuse_appeal(caller or "unknown", 404, "unknown_content_id",
+                              f"We have no submission with content_id '{content_id}'. "
+                              "Check it against the one /submit gave you.",
+                              content_id=content_id)
+
+    # Only the writer can appeal their own piece, if they tell us who they are.
+    owner = decision.get("creator_id")
+    if caller is not None and caller != owner:
+        return _refuse_appeal(caller, 403, "not_your_submission",
+                              "Only the person who submitted this piece can appeal it.",
+                              content_id=content_id)
+
+    # 2. Record it. The log is append-only: the original decision stays put.
+    already = any(e.get("event") == "appeal" for e in history)
+    entry = audit.log_appeal(content_id=content_id, creator_id=owner,
+                             reasoning=reasoning.strip())
+
+    # 3. Confirm.
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "content_id": content_id,
+        "status": "under_review",
+        "appeal_recorded_at": entry["timestamp"],
+        "previous_guess": decision.get("guess"),
+        "message": (
+            "Thanks, we've got your appeal. A person will review this piece. "
+            "Until then it's marked as under review, not as AI-generated."
+            + (" (This adds to an appeal you'd already sent.)" if already else "")
+        ),
+    })
+
+
+def _refuse_appeal(creator_id, status, error, message, **extra):
+    """Refuse an appeal, and leave a trace of the refusal in the log."""
+    audit.log_rejection(creator_id=creator_id, reason=error, http_status=status,
+                        route="appeal", **extra)
+    return jsonify({"error": error, "message": message}), status
+
+
+@app.get("/content/<content_id>")
+def content_status(content_id):
+    """
+    One item's current status (stretch feature).
+
+        curl http://127.0.0.1:5000/content/<content_id>
+
+    The status is whatever the most recent decision or appeal says, read
+    straight from the audit log.
+    """
+    history = [e for e in audit.entries_for(content_id) if e.get("event") != "rejected"]
+    decision = next((e for e in history if e.get("status") == "decided"), None)
+    if decision is None:
+        return jsonify({"error": "unknown_content_id",
+                        "message": f"No submission with content_id '{content_id}'."}), 404
+
+    appeals = [e for e in history if e.get("event") == "appeal"]
+    return jsonify({
+        "content_id": content_id,
+        "creator_id": decision.get("creator_id"),
+        "status": history[-1].get("status"),
+        "guess": decision.get("guess"),
+        "confidence": decision.get("combined_score"),
+        "label": decision.get("label"),
+        "model_score": decision.get("model_score"),
+        "style_score": decision.get("style_score"),
+        "decided_at": decision.get("timestamp"),
+        "appeals": [{"at": a["timestamp"], "reasoning": a.get("reasoning")} for a in appeals],
+    })
 
 
 # ── Already works ─────────────────────────────────────────────────────────────

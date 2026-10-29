@@ -113,7 +113,7 @@ def log_rejection(creator_id: str, reason: str, **extra) -> dict:
 
 
 def _append(entry: dict) -> dict:
-    config.LOG_DIR.mkdir(parents=True, exist_ok=True)
+    config.AUDIT_LOG.parent.mkdir(parents=True, exist_ok=True)
     line = json.dumps(entry, ensure_ascii=False)
     with _lock:
         with config.AUDIT_LOG.open("a", encoding="utf-8") as f:
