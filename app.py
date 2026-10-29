@@ -203,69 +203,16 @@ def submit():
     """
     payload = request.get_json(silent=True)
 
-    # ── 1. Check the input before any model sees it ──────────────────────
-    problem = _check_submission(payload)
-    if problem:
-        status, error, message = problem
-        creator = payload.get("creator_id") if isinstance(payload, dict) else None
-        audit.log_rejection(
-            creator_id=creator if isinstance(creator, str) and creator.strip() else "unknown",
-            reason=error,
-            http_status=status,
-        )
-        return jsonify({"error": error, "message": message}), status
-
-    text = payload["text"].strip()
-    creator_id = payload["creator_id"].strip()
-    content_id = uuid.uuid4().hex[:12]
-
-    # ── 2. Signal one: how predictable the text is to a language model ───
-    try:
-        model_score = detector.model_signal(text)
-    except detector.DetectorUnavailable as exc:
-        audit.log_rejection(creator_id=creator_id, reason="detector_unavailable",
-                            http_status=503)
-        return jsonify({"error": "detector_unavailable", "message": str(exc)}), 503
-    except ValueError:
-        # Fewer than 3 tokens: nothing for the model to be surprised by.
-        audit.log_rejection(creator_id=creator_id, reason="too_short", http_status=400)
-        return jsonify({
-            "error": "too_short",
-            "message": "This is too short to look at. Send at least a sentence or two.",
-        }), 400
-
-    # ── 3. Signal two: the shape of the text ─────────────────────────────
-    style_score = stylometry.style_signal(text)
-
-    # ── 4. One number from two ───────────────────────────────────────────
-    combined = round(scoring.combine_signals(model_score, style_score), 4)
-
-    # ── 5. The number a person can read ──────────────────────────────────
-    word_count = len(stylometry.words(text))
-    guess, label = scoring.score_to_label(combined, word_count=word_count)
-
-    # ── 6. Log it, then answer ───────────────────────────────────────────
-    audit.log_decision(
-        content_id=content_id,
-        creator_id=creator_id,
-        guess=guess,
-        model_score=model_score,
-        style_score=style_score,
-        combined_score=combined,
-        label=label,
-        status="decided",
-        word_count=word_count,
-    )
+    # Step 1 - get the route working without any logic
 
     return jsonify({
-        "content_id": content_id,
-        "guess": guess,
-        "confidence": combined,
-        "label": label,
-        "model_score": model_score,
-        "style_score": style_score,
-        "status": "decided",
-    })
+        "content_id": "hardcoded",
+        "guess": "unsure",
+        "confidence": 0.5,
+        "label": "not built yet",
+        "model_score": None,
+        "style_score": None,
+    }), 200
 
 
 def _check_submission(payload):
