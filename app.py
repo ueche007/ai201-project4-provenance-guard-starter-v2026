@@ -202,8 +202,14 @@ def submit():
     a malformed input is one of the most common real failures there is.
     """
     payload = request.get_json(silent=True)
+    if not isinstance(payload, dict):
+        payload = {}
 
-    # Step 1 - get the route working without any logic
+    # Step 2 - JSON goes in: pull text and creator_id out of the body
+    text = payload.get("text")
+    creator_id = payload.get("creator_id")
+    if not isinstance(text, str) or not text.strip():
+        return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
 
     return jsonify({
         "content_id": "hardcoded",
