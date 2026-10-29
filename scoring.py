@@ -88,6 +88,7 @@ def score_to_label(score: float, word_count: int | None = None) -> tuple[str, st
     """
     if word_count is not None and word_count < config.MIN_WORDS_TO_JUDGE:
         return "unsure", LABEL_UNSURE
+    score = round(float(score), 4)   # 0.7000000000000001 is 0.70, not above it
     if score > config.AI_THRESHOLD:
         return "ai", LABEL_AI
     if score < config.HUMAN_THRESHOLD:

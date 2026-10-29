@@ -157,7 +157,7 @@ def _ai_ness(value: float, midpoint: float, spread: float, direction: int) -> fl
 
 def style_breakdown(text: str) -> dict:
     """The three raw measures and their 0-1 AI-ness. Handy for debugging."""
-    n_sentences = len(sentences(text))
+    n_sentences = sum(1 for s in sentences(text) if words(s))
     raw = {
         "sentence_spread": sentence_length_spread(text),
         "vocabulary": type_token_ratio(text),

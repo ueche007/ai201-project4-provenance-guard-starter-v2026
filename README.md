@@ -44,8 +44,10 @@ and it gives the writer a way to say "you got this wrong".
    (`app.py::submit`).
 2. **Check the input.** Missing, empty, non-string or over-long text, a missing
    `creator_id`, or a body that isn't a JSON object is refused with a 4xx and a
-   reason, and the refusal is written to the audit log
-   (`app.py::_check_submission`). Nothing malformed reaches a model.
+   reason (`app.py::_check_submission`), and `submit` writes the refusal to
+   the audit log. Nothing malformed reaches a model. The one refusal that
+   happens after the model is text under 3 tokens, which the detector can't
+   score: that gets a 400 `too_short`, also logged.
 3. **Signal one.** gpt2, running locally, measures how predictable the text
    is (perplexity), squashed to 0–1 where higher means more AI-like
    (`detector.py::model_signal`).
@@ -73,11 +75,14 @@ status, label, signal scores and any appeals (`app.py::content_status`).
 
 ## Signals and Scoring
 
-All numbers below come from `results/calibration.md`, produced by
-`python calibrate.py` from `calibration/texts.json`. That set is 16 passages
-from public-domain books on Project Gutenberg (written long before language
-models existed) and 8 AI-generated pieces: 4 typical, 2 plainly worded, and 2
-lightly hand-edited. **I tuned the settings on these same texts, so the
+Measured numbers below come from `results/calibration.md`, produced by
+`python calibrate.py` from `calibration/texts.json`, except the Grimm sample
+scores, which come from the Sample Run (`logs/audit.jsonl`). Weights,
+thresholds and midpoints are settings in `config.py` and `stylometry.py`. The
+calibration set is 16 passages from public-domain books on Project Gutenberg
+(written long before language models existed) and 8 AI-generated pieces: 4
+typical, 2 plainly worded, and 2 rewrites of typical pieces into a casual
+voice (`ai_7` rewrites `ai_1`, `ai_8` rewrites `ai_2`). **I tuned the settings on these same texts, so the
 results show the settings fit, not that they work on new writing.**
 
 ### Signal one — the model signal
@@ -110,11 +115,12 @@ to understand a word (`stylometry.py`):
 |---|---|---|---|
 | Sentence-length spread | stdev ÷ mean of words per sentence | low (below 0.42) | 0.6 |
 | Vocabulary variety | moving-average type-token ratio, 50-word window | high (above 0.82) | 0.2 |
-| Expressive punctuation | `; : ! ? ( ) " ' — – …` per 100 words | low (below 1.5) | 0.2 |
+| Expressive punctuation | `; : ! ? ( ) " ' — – …`, curly quotes, and typed `--` / `...`, per 100 words | low (below 1.5) | 0.2 |
 
 Each goes through a logistic curve to 0–1 and the weighted average is the
 signal. A measure with no evidence drops out: spread on a one-sentence text,
-vocabulary on under 50 words.
+vocabulary on under 50 words. Apostrophes count as punctuation, so
+contractions (*don't*, *it's*) nudge a text toward human.
 
 **Why that might differ between human and AI writing:** generated prose marches
 in even, mid-length sentences. The AI pieces' spread was 0.24–0.42 and the
@@ -132,8 +138,10 @@ because the groups overlap.
 
 **What it can't see:** what the text says. Anything that changes the shape
 without changing the substance moves it: breaking long sentences up, adding
-a quotation, sprinkling in dashes and exclamation marks. One of my
-hand-edited AI pieces got from 0.88 down to 0.50 that way. My human set is
+a quotation, sprinkling in dashes and exclamation marks. `ai_8` is a casual
+rewrite of `ai_2`, the same points in the same order with shorter sentences,
+a question, an exclamation, a dash and a colon. Its style score fell from
+0.88 to 0.50 (its model score fell less, 0.95 to 0.82). My human set is
 also mostly 19th-century fiction full of dialogue, which favours this signal.
 Modern plain human writing such as emails and essays is under-represented,
 and I expect it to score higher.
@@ -147,7 +155,8 @@ signals to agree. Calling something human doesn't, because a missed AI piece
 costs the site little and a wrong accusation costs a writer a lot.
 
 **The numbers:** `WEIGHT_MODEL_SIGNAL = 0.6`, `WEIGHT_STYLE_SIGNAL = 0.4`,
-`VETO_BELOW = 0.5`, cap = `AI_THRESHOLD - 0.01` = 0.69 (`config.py`). The model
+`VETO_BELOW = 0.5` (`config.py`); the cap is `AI_THRESHOLD - 0.01` = 0.69
+(`scoring.py::combine_signals`). The model
 signal weighs more because it reads the text, while the style signal is the
 easier one to game. The veto is what stops the model signal's blind spot
 from becoming an accusation.
@@ -161,8 +170,8 @@ from becoming an accusation.
   which is "unsure". The style signal also vetoes an AI verdict, so even
   a stronger model score couldn't push this past 0.69. Without the veto, a
   model score of 0.95 with this style score would give 0.707, an accusation.
-- **Lightly edited AI (`ai_8` in `results/calibration.md`):** model 0.823,
-  style 0.497. The average is 0.6926 and the veto caps it at 0.690, so the
+- **Rewritten AI (`ai_8` in `results/calibration.md`):** model 0.823,
+  style 0.497. The average is about 0.693 and the veto caps it at 0.690, so the
   label is "unsure". That's AI text getting through, which is the trade
   I chose.
 
@@ -172,8 +181,10 @@ from becoming an accusation.
 
 Thresholds are `HUMAN_THRESHOLD = 0.45` and `AI_THRESHOLD = 0.70`
 (`config.py`). The bands are half-open, so every score from 0.00 to 1.00 maps to
-exactly one label; a sweep in steps of 0.01 gave 45 human, 26 unsure, 30 AI,
-101 of 101 mapped. Text under 40 words gets the unsure label whatever it scores.
+exactly one label; a sweep of `score_to_label(i / 100)` for i = 0…100 gave 45
+human, 26 unsure, 30 AI, 101 of 101 mapped. Scores are rounded to 4 decimals
+before comparing, so floating-point noise like 0.7000000000000001 can't cross
+a line. Text under 40 words gets the unsure label whatever it scores.
 
 | Label | Score range | The exact text a reader sees |
 |---|---|---|
@@ -198,7 +209,9 @@ nothing about AI being "possible", because that is an accusation.
 
 The text is from *Grimm's Fairy Tales* (Project Gutenberg #2591), so a person
 wrote it. It's plain, long-sentenced storytelling, the kind of writing signal
-one reads as machine-like. Responses pretty-printed with `python -m json.tool`.
+one reads as machine-like. It's the first three sentences of calibration
+passage `human_8`, so the settings were tuned on it. The full passage scored
+0.470; this shorter cut scored 0.589. Responses pretty-printed with `python -m json.tool`.
 
 **A submission**
 

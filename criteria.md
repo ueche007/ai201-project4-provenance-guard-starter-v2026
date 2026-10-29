@@ -68,6 +68,11 @@ obvious cases can't support three labels; the bands would be decided by
 noise. 0.25 is the width of my unsure band plus a margin, so the two groups
 can sit on opposite sides of it.
 
+> **Correction (unit 7, after the build):** the reason above is wrong as
+> written. When I wrote it the band was 0.35–0.65 (0.30 wide); it's now
+> 0.45–0.70, exactly 0.25 wide, so there is no margin. The target itself is
+> unchanged: 0.25 is the full width of the unsure band.
+
 ---
 
 ## 3. All three labels are reachable, and no score falls through a gap

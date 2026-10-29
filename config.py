@@ -90,7 +90,7 @@ VETO_BELOW = 0.5
 # Mine: below 0.45 is human, above 0.70 is AI, 0.45-0.70 is unsure. Set from 24
 # calibration texts (README, "Signals and Scoring"): no human passage scored
 # above 0.54, so 0.70 leaves a margin of 0.16 before anyone is accused. The
-# lightly edited AI pieces (0.53, 0.64) land in unsure, and that's the trade
+# rewritten AI pieces (0.53, 0.69) land in unsure, and that's the trade
 # I chose: let some AI through rather than accuse a writer.
 
 HUMAN_THRESHOLD = 0.45
