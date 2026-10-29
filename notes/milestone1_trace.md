@@ -30,9 +30,10 @@
   with few dashes, brackets, questions or quotes. People's writing is lumpier.
 - *What it can't see:* what the text says. Anything that changes the shape
   without changing the meaning moves it: breaking sentences up, adding dashes,
-  a quotation, a question. In `samples/`, the lightly edited version of the
-  time-management text scores 0.34 on style and is labelled human; the
-  unedited version scores 0.62.
+  a quotation, a question. In `samples/`, `borderline.json` makes the same
+  points as `clearly_ai.json` in a casual voice, with a dash and a semicolon.
+  It scores 0.34 on style (0.62 for `clearly_ai`), and the service labels it
+  human (0.348), not unsure. Shape alone moved it that far.
 
 ## 3. Tracing the false positive
 
