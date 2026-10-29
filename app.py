@@ -211,12 +211,16 @@ def submit():
     if not isinstance(text, str) or not text.strip():
         return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
 
+    # Step 3 - one real signal that we first tested from the terminal
+    #   python detector.py "some text"
+    model_score = detector.model_signal(text)
+
     return jsonify({
         "content_id": "hardcoded",
         "guess": "unsure",
         "confidence": 0.5,
         "label": "not built yet",
-        "model_score": None,
+        "model_score": model_score,
         "style_score": None,
     }), 200
 
