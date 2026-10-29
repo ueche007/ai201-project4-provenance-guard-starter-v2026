@@ -306,11 +306,18 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
 - *What I changed:* after Claude helped debug it, I kept the changes: the
   check in front of Step 2 and the regression test.
 
-**Moment 2**
+**Moment 2 — the borderline sample**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I gave Claude the instructor's three demo texts from
+  class and asked it to set them up as JSON files in `samples/`.
+- *What came back:* three sample files, but the screenshot had cut off the
+  first sample's name, and Claude guessed it was "lightly edited AI".
+- *What I changed:* I pointed out it was the "borderline" sample and had it
+  renamed to `borderline.json`. Running it showed my system labels the
+  borderline text **human** (score 0.348), not unsure. It makes the same
+  points as `clearly_ai.json` (0.702), but in a casual voice, and that alone
+  moved it across two labels. That's the style signal's blind spot, and I'm
+  keeping it as a test case for unit 8.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
