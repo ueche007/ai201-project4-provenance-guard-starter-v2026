@@ -103,6 +103,7 @@ position.**
 | `python detector.py` | Downloads the model and scores a sample — **run before class** |
 | `python detector.py "some text"` | Score one piece of text from the terminal |
 | `python stylometry.py "some text"` | Your style measures, on one piece of text |
+| `curl -X POST http://127.0.0.1:5000/submit -H "Content-Type: application/json" -d @samples/clearly_ai.json` | Send one of the sample texts in `samples/` (`clearly_ai`, `clearly_human`, `lightly_edited_ai`) |
 | `python calibrate.py` | Scores `calibration/texts.json` with both signals, writes `results/calibration.md` |
 | `python run_attacks.py --set <folder>` | The attack set — **unit 8** |
 | `python run_attacks.py --flood 15` | Push past your rate limit and print the status codes — **unit 8** |
