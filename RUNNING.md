@@ -88,8 +88,9 @@ position.**
 | `POST /ping` | **works** | The example. Don't edit it |
 | `GET /health` | **works** | Is the service up, is the model loaded |
 | `GET /log` | **works** | The audit log, as JSON |
-| `POST /submit` | **you build it** | Milestones 3, 4, 5 |
-| `POST /appeal` | **you build it** | Milestone 5 |
+| `POST /submit` | **built** | Scores text, labels it, logs it |
+| `POST /appeal` | **built** | Records an appeal, moves the item to `under_review` |
+| `GET /content/<id>` | **built** (stretch) | One item's current status |
 
 ---
 
@@ -102,6 +103,7 @@ position.**
 | `python detector.py` | Downloads the model and scores a sample — **run before class** |
 | `python detector.py "some text"` | Score one piece of text from the terminal |
 | `python stylometry.py "some text"` | Your style measures, on one piece of text |
+| `python calibrate.py` | Scores `calibration/texts.json` with both signals, writes `results/calibration.md` |
 | `python run_attacks.py --set <folder>` | The attack set — **unit 8** |
 | `python run_attacks.py --flood 15` | Push past your rate limit and print the status codes — **unit 8** |
 | `python run_eval.py --label before` | Your five criteria, three trials — **unit 8** |
@@ -284,6 +286,7 @@ sentences, a pasted quotation. That is very cheap to do on purpose.
 | `Cannot bind parameter 'Headers'` | You're in PowerShell, where `curl` is a different tool. Use `curl.exe`, on one line |
 | Request body arrives empty | curl needs `-H "Content-Type: application/json"` |
 | `Address already in use` | A server left running from an earlier attempt. Kill it, don't debug it |
+| On macOS, something answers on port 5000 before `app.py` starts | The AirPlay Receiver (ControlCenter) listens on port 5000. Flask still gets `127.0.0.1:5000`, but wait for the `Running on` line before sending requests |
 | The first submission takes 10+ seconds | Signal one is loading the model into memory. Later ones take a second or two |
 | *Every* submission takes 10+ seconds | Something is reloading the model each call. `GET /health` shows `detector_loaded` — if it goes back to `false`, look for a reload in your handler |
 | `DetectorUnavailable` | Run `python detector.py` once to download the model |

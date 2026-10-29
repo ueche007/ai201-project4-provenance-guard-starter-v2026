@@ -1,0 +1,170 @@
+[
+ {
+  "id": "ai_1",
+  "group": "ai",
+  "kind": "ai",
+  "source": "AI-generated for this calibration set",
+  "text": "Remote work has fundamentally transformed the way organizations operate. By eliminating the need for a daily commute, it allows employees to reclaim valuable time and achieve a healthier work-life balance. Additionally, companies can access a broader talent pool, as geographic location is no longer a limiting factor in hiring decisions. However, remote work also presents several challenges. Communication can become more difficult when teams are spread across different time zones, and maintaining a strong company culture requires intentional effort. Furthermore, some employees may experience feelings of isolation without regular in-person interaction. To address these challenges, organizations should invest in reliable collaboration tools, establish clear communication guidelines, and create opportunities for virtual team building. Ultimately, the success of remote work depends on a thoughtful approach that balances flexibility with structure. By prioritizing both productivity and employee well-being, companies can unlock the full potential of a distributed workforce."
+ },
+ {
+  "id": "ai_2",
+  "group": "ai",
+  "kind": "ai",
+  "source": "AI-generated for this calibration set",
+  "text": "Regular exercise offers numerous benefits for both physical and mental health. First and foremost, it strengthens the cardiovascular system, reducing the risk of heart disease and stroke. In addition, physical activity helps maintain a healthy weight by burning calories and boosting metabolism. Exercise also plays a crucial role in mental well-being. It triggers the release of endorphins, which can improve mood and reduce feelings of stress and anxiety. Moreover, consistent physical activity has been linked to better sleep quality and increased energy levels throughout the day. It is important to note that exercise does not have to be intense to be effective. Even moderate activities such as walking, swimming, or cycling can provide significant health benefits. Experts generally recommend at least 150 minutes of moderate aerobic activity per week. In conclusion, incorporating regular exercise into your daily routine is one of the most effective ways to improve your overall quality of life."
+ },
+ {
+  "id": "ai_3",
+  "group": "ai",
+  "kind": "ai",
+  "source": "AI-generated for this calibration set",
+  "text": "The Industrial Revolution was a period of significant economic and social change that began in Britain in the late eighteenth century. It marked a shift from agrarian economies to industrial production, driven by innovations such as the steam engine, mechanized textile manufacturing, and improved iron production. These advancements led to the growth of factories and the rapid expansion of cities, as people moved from rural areas in search of employment. The impact of the Industrial Revolution was far-reaching. On one hand, it increased productivity, lowered the cost of goods, and laid the foundation for modern economic growth. On the other hand, it also brought about difficult working conditions, child labor, and environmental pollution. Over time, these challenges prompted social reforms and the development of labor laws. Today, historians recognize the Industrial Revolution as a turning point in human history that continues to shape the modern world in profound ways."
+ },
+ {
+  "id": "ai_4",
+  "group": "ai",
+  "kind": "ai",
+  "source": "AI-generated for this calibration set",
+  "text": "Learning a new language is a rewarding journey that opens doors to new cultures, opportunities, and perspectives. To get started, it is helpful to set clear and achievable goals. For example, you might aim to learn a certain number of new words each week or hold a basic conversation within a few months. Consistency is key when it comes to language learning. Practicing for even fifteen minutes a day can lead to significant progress over time. There are many resources available to support your learning, including mobile apps, online courses, and language exchange programs. Additionally, immersing yourself in the language through movies, music, and books can help you develop a more natural understanding. Don't be afraid to make mistakes, as they are an essential part of the learning process. Remember, every small step brings you closer to fluency. With patience and dedication, you can achieve your language learning goals."
+ },
+ {
+  "id": "ai_5",
+  "group": "ai",
+  "kind": "ai_plain",
+  "source": "AI-generated for this calibration set",
+  "text": "Dogs are good pets. They are loyal and they love their owners. A dog needs food, water, and a safe place to sleep. It also needs to go for walks every day. Walking is good for the dog and for the owner. Dogs like to play. They can play with balls, sticks, and toys. Some dogs like to swim. Training is important for dogs. A trained dog is happy and safe. You can teach a dog to sit, stay, and come. It takes time and patience. You should use treats and kind words. Dogs also need to see a vet. The vet can check if the dog is healthy. Dogs can live for many years. They become part of the family. Many people say that a dog is a best friend. Having a dog can make your life better and happier."
+ },
+ {
+  "id": "ai_6",
+  "group": "ai",
+  "kind": "ai_plain",
+  "source": "AI-generated for this calibration set",
+  "text": "Saving money is an important skill. It helps you be ready for the future. The first step is to make a budget. A budget shows how much money you earn and how much you spend. Write down all your costs each month. Then look for ways to spend less. You can cook at home instead of eating out. You can stop paying for things you do not use. Next, set a goal for saving. Try to save a small amount each month. Put this money in a savings account. It is a good idea to have an emergency fund. This money can help you if something bad happens, like losing your job. Saving money takes time and effort. But it is worth it in the end. With a good plan, anyone can save money and feel more secure."
+ },
+ {
+  "id": "ai_7",
+  "group": "ai",
+  "kind": "ai_edited",
+  "source": "AI-generated for this calibration set",
+  "text": "so remote work has basically changed how a lot of companies run. no commute means people get time back and maybe a better work-life balance. companies can also hire from anywhere, which is huge. but its not all great. communication gets harder when your team is spread out across time zones, and keeping a company culture going takes real effort. some people also feel kind of isolated without seeing coworkers. to deal with this, orgs should get good collaboration tools, set clear rules for communication, and make time for virtual team stuff. in the end it comes down to balancing flexibility with some structure. if companies focus on productivity AND wellbeing they can really get the most out of a distributed team."
+ },
+ {
+  "id": "ai_8",
+  "group": "ai",
+  "kind": "ai_edited",
+  "source": "AI-generated for this calibration set",
+  "text": "Exercise is great for your body and your mind. It makes your heart stronger and cuts the risk of heart disease and stroke. It also helps you keep a healthy weight. Honestly though? The mental side is the bigger deal for me. You get endorphins, your mood goes up, stress goes down. Sleep gets better too, and you have more energy during the day. And it doesn't need to be intense! Walking, swimming, biking -- all of that counts. Experts say about 150 minutes of moderate activity a week. Bottom line: working out regularly is one of the best ways to make your life better."
+ },
+ {
+  "id": "human_1",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Doyle, Sherlock Holmes (Project Gutenberg #1661), a passage from the middle of the book",
+  "text": "“‘Dearest do not be frightened. All will come well. There is a huge error which it may take some little time to rectify. Wait in patience.—NEVILLE.’ Written in pencil upon the fly-leaf of a book, octavo size, no water-mark. Hum! Posted to-day in Gravesend by a man with a dirty thumb. Ha! And the flap has been gummed, if I am not very much in error, by a person who had been chewing tobacco. And you have no doubt that it is your husband’s hand, madam?” “And they were posted to-day at Gravesend. Well, Mrs. St. Clair, the clouds lighten, though I should not venture to say that the danger is over.” “Unless this is a clever forgery to put us on the wrong scent. The ring, after all, proves nothing. It may have been taken from him.” “Oh, you must not discourage me, Mr. Holmes. I know that all is well with him. There is so keen a sympathy between us that I should know if evil came upon him. On the very day that I saw him last he cut himself in the bedroom, and yet I in the dining-room rushed upstairs instantly with the utmost certainty that something had happened. Do you think that I would respond to such a trifle and yet be ignorant of his death?”"
+ },
+ {
+  "id": "human_2",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Doyle, Sherlock Holmes (Project Gutenberg #1661), a passage from the middle of the book",
+  "text": "“He shot one of his suspicious looks at me. ‘Perhaps we had better proceed to business, then,’ said he. ‘Mr. Ferguson and I will take you up to see the machine.’ “‘No, no. This is only where we compress it. But never mind that. All we wish you to do is to examine the machine and to let us know what is wrong with it.’ “We went upstairs together, the colonel first with the lamp, the fat manager and I behind him. It was a labyrinth of an old house, with corridors, passages, narrow winding staircases, and little low doors, the thresholds of which were hollowed out by the generations who had crossed them. There were no carpets and no signs of any furniture above the ground floor, while the plaster was peeling off the walls, and the damp was breaking through in green, unhealthy blotches. I tried to put on as unconcerned an air as possible, but I had not forgotten the warnings of the lady, even though I disregarded them, and I kept a keen eye upon my two companions. Ferguson appeared to be a morose and silent man, but I could see from the little that he said that he was at least a fellow-countryman."
+ },
+ {
+  "id": "human_3",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Thoreau, Walden (Project Gutenberg #205), a passage from the middle of the book",
+  "text": "On gala days the town fires its great guns, which echo like popguns to these woods, and some waifs of martial music occasionally penetrate thus far. To me, away there in my bean-field at the other end of the town, the big guns sounded as if a puffball had burst; and when there was a military turnout of which I was ignorant, I have sometimes had a vague sense all the day of some sort of itching and disease in the horizon, as if some eruption would break out there soon, either scarlatina or canker-rash, until at length some more favorable puff of wind, making haste over the fields and up the Wayland road, brought me information of the “trainers.” It seemed by the distant hum as if somebody’s bees had swarmed, and that the neighbors, according to Virgil’s advice, by a faint _tintinnabulum_ upon the most sonorous of their domestic utensils, were endeavoring to call them down into the hive again. And when the sound died quite away, and the hum had ceased, and the most favorable breezes told no tale, I knew that they had got the last drone of them all safely into the Middlesex hive, and that now their minds were bent on the honey with which it was smeared."
+ },
+ {
+  "id": "human_4",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Thoreau, Walden (Project Gutenberg #205), a passage from the middle of the book",
+  "text": "Breed’s hut was standing only a dozen years ago, though it had long been unoccupied. It was about the size of mine. It was set on fire by mischievous boys, one Election night, if I do not mistake. I lived on the edge of the village then, and had just lost myself over Davenant’s Gondibert, that winter that I labored with a lethargy,—which, by the way, I never knew whether to regard as a family complaint, having an uncle who goes to sleep shaving himself, and is obliged to sprout potatoes in a cellar Sundays, in order to keep awake and keep the Sabbath, or as the consequence of my attempt to read Chalmers’ collection of English poetry without skipping. It fairly overcame my Nervii. I had just sunk my head on this when the bells rung fire, and in hot haste the engines rolled that way, led by a straggling troop of men and boys, and I among the foremost, for I had leaped the brook. We thought it was far south over the woods,—we who had run to fires before,—barn, shop, or dwelling-house, or all together. “It’s Baker’s barn,” cried one. “It is the Codman place,” affirmed another. And then fresh sparks went up above the wood, as if the roof fell in, and we all shouted “Concord to the rescue!” Wagons shot past with furious speed and crushing loads, bearing, perchance, among the rest, the agent of the Insurance Company, who was bound to go however far; and ever and anon the engine bell tinkled behind, more slow and sure; and rearmost of all, as it was afterward whispered, came they who set the fire and gave the alarm."
+ },
+ {
+  "id": "human_5",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Twain, Life on the Mississippi (Project Gutenberg #245), a passage from the middle of the book",
+  "text": "More of the river's freaks. In times past, the channel used to strike above Island 37, by Brandywine Bar, and down towards Island 39. Afterward, changed its course and went from Brandywine down through Vogelman's chute in the Devil's Elbow, to Island 39--part of this course reversing the old order; the river running _up_ four or five miles, instead of down, and cutting off, throughout, some fifteen miles of distance. This in 1876. All that region is now called Centennial Island. There is a tradition that Island 37 was one of the principal abiding places of the once celebrated 'Murel's Gang.' This was a colossal combination of robbers, horse-thieves, negro-stealers, and counterfeiters, engaged in business along the river some fifty or sixty years ago. While our journey across the country towards St. Louis was in progress we had had no end of Jesse James and his stirring history; for he had just been assassinated by an agent of the Governor of Missouri, and was in consequence occupying a good deal of space in the newspapers. Cheap histories of him were for sale by train boys. According to these, he was the most marvelous creature of his kind that had ever existed. It was a mistake. Murel was his equal in boldness; in pluck; in rapacity; in cruelty, brutality, heartlessness, treachery, and in general and comprehensive vileness and shamelessness; and very much his superior in some larger aspects. James was a retail rascal; Murel, wholesale. James's modest genius dreamed of no loftier flight than the planning of raids upon cars, coaches, and country banks; Murel projected negro insurrections and the capture of New Orleans; and furthermore, on occasion, this Murel could go into a pulpit and edify the congregation."
+ },
+ {
+  "id": "human_6",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Twain, Life on the Mississippi (Project Gutenberg #245), a passage from the middle of the book",
+  "text": "MR. JOEL CHANDLER HARRIS ['Uncle Remus') was to arrive from Atlanta at seven o'clock Sunday morning; so we got up and received him. We were able to detect him among the crowd of arrivals at the hotel-counter by his correspondence with a description of him which had been furnished us from a trustworthy source. He was said to be undersized, red-haired, and somewhat freckled. He was the only man in the party whose outside tallied with this bill of particulars. He was said to be very shy. He is a shy man. Of this there is no doubt. It may not show on the surface, but the shyness is there. After days of intimacy one wonders to see that it is still in about as strong force as ever. There is a fine and beautiful nature hidden behind it, as all know who have read the Uncle Remus book; and a fine genius, too, as all know by the same sign. I seem to be talking quite freely about this neighbor; but in talking to the public I am but talking to his personal friends, and these things are permissible among friends."
+ },
+ {
+  "id": "human_7",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Grimm, Fairy Tales (Project Gutenberg #2591), a passage from the middle of the book",
+  "text": "A little while after, Catherine thought the door was still very heavy: so she whispered to Frederick, ‘I must throw the vinegar down.’ ‘Pray don’t,’ answered he, ‘it will discover us.’ ‘I can’t help that,’ said she, ‘go it must.’ So she poured all the vinegar down; and the thieves said, ‘What a heavy dew there is!’ At last it popped into Catherine’s head that it was the door itself that was so heavy all the time: so she whispered, ‘Frederick, I must throw the door down soon.’ But he begged and prayed her not to do so, for he was sure it would betray them. ‘Here goes, however,’ said she: and down went the door with such a clatter upon the thieves, that they cried out ‘Murder!’ and not knowing what was coming, ran away as fast as they could, and left all the gold. So when Frederick and Catherine came down, there they found all their money safe and sound. There was once upon a time a woman who was a real witch and had two daughters, one ugly and wicked, and this one she loved because she was her own daughter, and one beautiful and good, and this one she hated, because she was her stepdaughter. The stepdaughter once had a pretty apron, which the other fancied so much that she became envious, and told her mother that she must and would have that apron. ‘Be quiet, my child,’ said the old woman, ‘and you shall have it. Your stepsister has long deserved death; tonight when she is asleep I will come and cut her head off. Only be careful that you are at the far side of the bed, and push her well to the front.’ It would have been all over with the poor girl if she had not just then been standing in a corner, and heard everything."
+ },
+ {
+  "id": "human_8",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Grimm, Fairy Tales (Project Gutenberg #2591), a passage from the middle of the book",
+  "text": "And when the time came for him to go home, he had bought pearls and jewels for the two eldest, but he had sought everywhere in vain for the rose; and when he went into any garden and asked for such a thing, the people laughed at him, and asked him whether he thought roses grew in snow. This grieved him very much, for Lily was his dearest child; and as he was journeying home, thinking what he should bring her, he came to a fine castle; and around the castle was a garden, in one half of which it seemed to be summer-time and in the other half winter. On one side the finest flowers were in full bloom, and on the other everything looked dreary and buried in the snow. ‘A lucky hit!’ said he, as he called to his servant, and told him to go to a beautiful bed of roses that was there, and bring him away one of the finest flowers. This done, they were riding away well pleased, when up sprang a fierce lion, and roared out, ‘Whoever has stolen my roses shall be eaten up alive!’ Then the man said, ‘I knew not that the garden belonged to you; can nothing save my life?’ ‘No!’ said the lion, ‘nothing, unless you undertake to give me whatever meets you on your return home; if you agree to this, I will give you your life, and the rose too for your daughter.’ But the man was unwilling to do so and said, ‘It may be my youngest daughter, who loves me most, and always runs to meet me when I go home.’ Then the servant was greatly frightened, and said, ‘It may perhaps be only a cat or a dog."
+ },
+ {
+  "id": "human_9",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Jerome, Three Men in a Boat (Project Gutenberg #308), a passage from the middle of the book",
+  "text": "Five minutes afterwards, George said, “Ah!” too, and threw his plate out on the bank; and, three minutes later than that, Montmorency gave the first sign of contentment he had exhibited since we had started, and rolled over on his side, and spread his legs out; and then I said, “Ah!” and bent my head back, and bumped it against one of the hoops, but I did not mind it. I did not even swear. How good one feels when one is full—how satisfied with ourselves and with the world! People who have tried it, tell me that a clear conscience makes you very happy and contented; but a full stomach does the business quite as well, and is cheaper, and more easily obtained. One feels so forgiving and generous after a substantial and well-digested meal—so noble-minded, so kindly-hearted. It is very strange, this domination of our intellect by our digestive organs. We cannot work, we cannot think, unless our stomach wills so. It dictates to us our emotions, our passions. After eggs and bacon, it says, “Work!” After beefsteak and porter, it says, “Sleep!” After a cup of tea (two spoonsful for each cup, and don’t let it stand more than three minutes), it says to the brain, “Now, rise, and show your strength. Be eloquent, and deep, and tender; see, with a clear eye, into Nature and into life; spread your white wings of quivering thought, and soar, a god-like spirit, over the whirling world beneath you, up through long lanes of flaming stars to the gates of eternity!”"
+ },
+ {
+  "id": "human_10",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Jerome, Three Men in a Boat (Project Gutenberg #308), a passage from the middle of the book",
+  "text": "It must be disheartening work learning a musical instrument. You would think that Society, for its own sake, would do all it could to assist a man to acquire the art of playing a musical instrument. But it doesn’t! I knew a young fellow once, who was studying to play the bagpipes, and you would be surprised at the amount of opposition he had to contend with. Why, not even from the members of his own family did he receive what you could call active encouragement. His father was dead against the business from the beginning, and spoke quite unfeelingly on the subject. My friend used to get up early in the morning to practise, but he had to give that plan up, because of his sister. She was somewhat religiously inclined, and she said it seemed such an awful thing to begin the day like that. So he sat up at night instead, and played after the family had gone to bed, but that did not do, as it got the house such a bad name. People, going home late, would stop outside to listen, and then put it about all over the town, the next morning, that a fearful murder had been committed at Mr. Jefferson’s the night before; and would describe how they had heard the victim’s shrieks and the brutal oaths and curses of the murderer, followed by the prayer for mercy, and the last dying gurgle of the corpse."
+ },
+ {
+  "id": "human_11",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Montgomery, Anne of Green Gables (Project Gutenberg #45), a passage from the middle of the book",
+  "text": "“Yes. I’ve got my patchwork scissors in my apron pocket fortunately,” said Anne. She solemnly clipped one of Diana’s curls. “Fare thee well, my beloved friend. Henceforth we must be as strangers though living side by side. But my heart will ever be faithful to thee.” Anne stood and watched Diana out of sight, mournfully waving her hand to the latter whenever she turned to look back. Then she returned to the house, not a little consoled for the time being by this romantic parting. “It is all over,” she informed Marilla. “I shall never have another friend. I’m really worse off than ever before, for I haven’t Katie Maurice and Violetta now. And even if I had it wouldn’t be the same. Somehow, little dream girls are not satisfying after a real friend. Diana and I had such an affecting farewell down by the spring. It will be sacred in my memory forever. I used the most pathetic language I could think of and said ‘thou’ and ‘thee.’ ‘Thou’ and ‘thee’ seem so much more romantic than ‘you.’ Diana gave me a lock of her hair and I’m going to sew it up in a little bag and wear it around my neck all my life. Please see that it is buried with me, for I don’t believe I’ll live very long. Perhaps when she sees me lying cold and dead before her Mrs. Barry may feel remorse for what she has done and will let Diana come to my funeral.”"
+ },
+ {
+  "id": "human_12",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Montgomery, Anne of Green Gables (Project Gutenberg #45), a passage from the middle of the book",
+  "text": "“Did anyone ever hear the like?” the mystified Marilla wanted to know. “Anne Shirley, whatever is the matter with you? What have you done? Get right up this minute and tell me. This minute, I say. There now, what is it?” Green it might be called, if it were any earthly color--a queer, dull, bronzy green, with streaks here and there of the original red to heighten the ghastly effect. Never in all her life had Marilla seen anything so grotesque as Anne’s hair at that moment. “Yes, it’s green,” moaned Anne. “I thought nothing could be as bad as red hair. But now I know it’s ten times worse to have green hair. Oh, Marilla, you little know how utterly wretched I am.” “I little know how you got into this fix, but I mean to find out,” said Marilla. “Come right down to the kitchen--it’s too cold up here--and tell me just what you’ve done. I’ve been expecting something queer for some time. You haven’t got into any scrape for over two months, and I was sure another one was due. Now, then, what did you do to your hair?”"
+ },
+ {
+  "id": "human_13",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Baum, Wizard of Oz (Project Gutenberg #55), a passage from the middle of the book",
+  "text": "Before them stood a little man about the same size as the Munchkins. He was clothed all in green, from his head to his feet, and even his skin was of a greenish tint. At his side was a large green box. “It has been many years since anyone asked me to see Oz,” he said, shaking his head in perplexity. “He is powerful and terrible, and if you come on an idle or foolish errand to bother the wise reflections of the Great Wizard, he might be angry and destroy you all in an instant.” “But it is not a foolish errand, nor an idle one,” replied the Scarecrow; “it is important. And we have been told that Oz is a good Wizard.” “So he is,” said the green man, “and he rules the Emerald City wisely and well. But to those who are not honest, or who approach him from curiosity, he is most terrible, and few have ever dared ask to see his face. I am the Guardian of the Gates, and since you demand to see the Great Oz I must take you to his Palace. But first you must put on the spectacles.”"
+ },
+ {
+  "id": "human_14",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Baum, Wizard of Oz (Project Gutenberg #55), a passage from the middle of the book",
+  "text": "“The princess was angry, and she knew, of course, who did it. She had all the Winged Monkeys brought before her, and she said at first that their wings should be tied and they should be treated as they had treated Quelala, and dropped in the river. But my grandfather pleaded hard, for he knew the Monkeys would drown in the river with their wings tied, and Quelala said a kind word for them also; so that Gayelette finally spared them, on condition that the Winged Monkeys should ever after do three times the bidding of the owner of the Golden Cap. This Cap had been made for a wedding present to Quelala, and it is said to have cost the princess half her kingdom. Of course my grandfather and all the other Monkeys at once agreed to the condition, and that is how it happens that we are three times the slaves of the owner of the Golden Cap, whosoever he may be.” “Quelala being the first owner of the Golden Cap,” replied the Monkey, “he was the first to lay his wishes upon us. As his bride could not bear the sight of us, he called us all to him in the forest after he had married her and ordered us always to keep where she could never again set eyes on a Winged Monkey, which we were glad to do, for we were all afraid of her."
+ },
+ {
+  "id": "human_15",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Twain, Huckleberry Finn (Project Gutenberg #76), a passage from the middle of the book",
+  "text": "So he went to marching up and down, thinking, and frowning horrible every now and then; then he would hoist up his eyebrows; next he would squeeze his hand on his forehead and stagger back and kind of moan; next he would sigh, and next he’d let on to drop a tear. It was beautiful to see him. By-and-by he got it. He told us to give attention. Then he strikes a most noble attitude, with one leg shoved forwards, and his arms stretched away up, and his head tilted back, looking up at the sky; and then he begins to rip and rave and grit his teeth; and after that, all through his speech, he howled, and spread around, and swelled up his chest, and just knocked the spots out of any acting ever _I_ see before. This is the speech—I learned it, easy enough, while he was learning it to the king: To be, or not to be; that is the bare bodkin That makes calamity of so long life; For who would fardels bear, till Birnam Wood do come to Dunsinane, But that the fear of something after death Murders the innocent sleep, Great nature’s second course, And makes us rather sling the arrows of outrageous fortune Than fly to others that we know not of. There’s the respect must give us pause: Wake Duncan with thy knocking! I would thou couldst; For who would bear the whips and scorns of time, The oppressor’s wrong, the proud man’s contumely, The law’s delay, and the quietus which his pangs might take. In the dead waste and middle of the night, when churchyards yawn In customary suits of solemn black, But that the undiscovered country from whose bourne no traveler returns, Breathes forth contagion on the world, And thus the native hue of resolution, like the poor cat i’ the adage, Is sicklied o’er with care."
+ },
+ {
+  "id": "human_16",
+  "group": "human",
+  "kind": "human_public_domain",
+  "source": "Twain, Huckleberry Finn (Project Gutenberg #76), a passage from the middle of the book",
+  "text": "“Well, then, I b’lieve you. But answer me only jest this one more—now _don’t_ git mad; didn’t you have it in your mind to hook the money and hide it?” “Well, I don’t care if I _did_, I didn’t _do_ it, anyway. But you not only had it in mind to do it, but you _done_ it.” “I wisht I never die if I done it, duke, and that’s honest. I won’t say I warn’t _goin_’ to do it, because I _was;_ but you—I mean somebody—got in ahead o’ me.” I was very glad to hear him say that; it made me feel much more easier than what I was feeling before. So the duke took his hands off and says: “If you ever deny it again I’ll drown you. It’s _well_ for you to set there and blubber like a baby—it’s fitten for you, after the way you’ve acted. I never see such an old ostrich for wanting to gobble everything—and I a-trusting you all the time, like you was my own father. You ought to been ashamed of yourself to stand by and hear it saddled on to a lot of poor niggers, and you never say a word for ’em. It makes me feel ridiculous to think I was soft enough to _believe_ that rubbage. Cuss you, I can see now why you was so anxious to make up the deffisit—you wanted to get what money I’d got out of the Nonesuch and one thing or another, and scoop it _all!_”"
+ }
+]
