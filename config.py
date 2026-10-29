@@ -47,15 +47,30 @@ DETECTOR_MODEL = os.getenv("AI201_DETECTOR_MODEL", "gpt2")
 DETECTOR_MAX_TOKENS = 400
 
 
+# ─── Input limits ────────────────────────────────────────────────────────────
+# Anything longer is refused with a 413 before it reaches a model. 20,000
+# characters is roughly 3,500 words: a long short story. The model only reads
+# the first 400 tokens anyway, so longer text buys no accuracy, only cost.
+MAX_TEXT_CHARS = 20_000
+
+# Below this many words neither signal has enough to go on, so the label is
+# always "unsure", whatever the score says. A short poem is legitimate writing,
+# and a confident verdict on 30 words would be a guess dressed up as a finding.
+MIN_WORDS_TO_JUDGE = 40
+
+# An appeal's reasoning is for a person to read. 5,000 characters is plenty.
+MAX_APPEAL_CHARS = 5_000
+
+
 # ─── Scoring (Milestone 4) ───────────────────────────────────────────────────
 # How much each signal counts toward the combined score.
 #
-# ⚠️ These are placeholders. Milestone 4 asks you to write your combining rule
-# down BEFORE you code it, and to put the numbers in your README. Whatever you
-# decide, it goes here.
+# The rule lives in scoring.py::combine_signals: a 0.6 / 0.4 weighted average,
+# and either signal can veto an AI verdict by scoring below VETO_BELOW.
 
-WEIGHT_MODEL_SIGNAL = 0.5
-WEIGHT_STYLE_SIGNAL = 0.5
+WEIGHT_MODEL_SIGNAL = 0.6
+WEIGHT_STYLE_SIGNAL = 0.4
+VETO_BELOW = 0.5
 
 
 # ─── Thresholds (Milestone 5) ────────────────────────────────────────────────
@@ -71,8 +86,15 @@ WEIGHT_STYLE_SIGNAL = 0.5
 # getting through. There is no setting that avoids the trade — only settings
 # that decide who pays for it.
 
-HUMAN_THRESHOLD = 0.35
-AI_THRESHOLD = 0.65
+#
+# Mine: below 0.45 is human, above 0.70 is AI, 0.45-0.70 is unsure. Set from 24
+# calibration texts (README, "Signals and Scoring"): no human passage scored
+# above 0.54, so 0.70 leaves a margin of 0.16 before anyone is accused. The
+# lightly edited AI pieces (0.53, 0.64) land in unsure, and that's the trade
+# I chose: let some AI through rather than accuse a writer.
+
+HUMAN_THRESHOLD = 0.45
+AI_THRESHOLD = 0.70
 
 # ⚠️ One thing that catches people out in Milestone 5. A weighted average can
 # only land between its two inputs — so while `style_signal` is still the stub
@@ -106,5 +128,7 @@ RATE_LIMIT_STORAGE = "memory://"
 # ─── Paths ───────────────────────────────────────────────────────────────────
 
 LOG_DIR = ROOT / "logs"
-AUDIT_LOG = LOG_DIR / "audit.jsonl"
+# Override with AI201_AUDIT_LOG to send test traffic somewhere other than the
+# log you commit as evidence.
+AUDIT_LOG = Path(os.getenv("AI201_AUDIT_LOG", str(LOG_DIR / "audit.jsonl")))
 RESULTS_DIR = ROOT / "results"
