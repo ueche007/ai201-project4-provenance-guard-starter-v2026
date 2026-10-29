@@ -44,7 +44,7 @@ and it gives the writer a way to say "you got this wrong".
    (`app.py::submit`).
 2. **Check the input.** Missing, empty, non-string or over-long text, a missing
    `creator_id`, or a body that isn't a JSON object is refused with a 4xx and a
-   reason (`app.py::_check_submission`), and `submit` writes the refusal to
+   reason (Step 2 in `app.py::submit`, plus `_check_submission`), and `submit` writes the refusal to
    the audit log. Nothing malformed reaches a model. The one refusal that
    happens after the model is text under 3 tokens, which the detector can't
    score: that gets a 400 `too_short`, also logged.

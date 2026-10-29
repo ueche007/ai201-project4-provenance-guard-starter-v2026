@@ -203,60 +203,77 @@ def submit():
     """
     payload = request.get_json(silent=True)
 
-    # ── 1. Check the input before any model sees it ──────────────────────
+    # Step 1 - to get the route working without any logic
+    # (Fahad's first pass. This is the response shape the route still keeps;
+    # the real return at the bottom fills these fields with real values.)
+    #
+    #   return jsonify({
+    #       "content_id": "hardcoded",
+    #       "guess": "unsure",
+    #       "confidence": 0.5,
+    #       "label": "not built yet",
+    #       "model_score": None,
+    #       "style_score": None,
+    #   }), 200
+
+    # Step 2 - JSON goes in: pull text and creator_id out of the body
+    if not isinstance(payload, dict):
+        # Added: a body that isn't a JSON object has no .get, so refuse it first.
+        audit.log_rejection(creator_id="unknown", reason="invalid_body", http_status=400)
+        return jsonify({"error": "invalid_body",
+                        "message": 'Send a JSON object like {"text": "...", "creator_id": "..."}.'}), 400
+    text = payload.get("text")
+    creator_id = payload.get("creator_id")
+    if not isinstance(text, str) or not text.strip():
+        audit.log_rejection(creator_id=_who(creator_id), reason="bad_request", http_status=400)
+        return jsonify({"error": "bad_request", "message": "Send JSON with a non-empty \"text\"."}), 400
+    # Added: the rest of the input checks (too long, missing creator_id).
     problem = _check_submission(payload)
     if problem:
         status, error, message = problem
-        creator = payload.get("creator_id") if isinstance(payload, dict) else None
-        audit.log_rejection(
-            creator_id=creator if isinstance(creator, str) and creator.strip() else "unknown",
-            reason=error,
-            http_status=status,
-        )
+        audit.log_rejection(creator_id=_who(creator_id), reason=error, http_status=status)
         return jsonify({"error": error, "message": message}), status
+    text = text.strip()
+    creator_id = creator_id.strip()
 
-    text = payload["text"].strip()
-    creator_id = payload["creator_id"].strip()
-    content_id = uuid.uuid4().hex[:12]
-
-    # ── 2. Signal one: how predictable the text is to a language model ───
+    # Step 3 - one real signal that we first tested from the terminal
+    #   python detector.py "some text"
+    #   (import detector is at the top of this file)
     try:
         model_score = detector.model_signal(text)
     except detector.DetectorUnavailable as exc:
-        audit.log_rejection(creator_id=creator_id, reason="detector_unavailable",
-                            http_status=503)
+        audit.log_rejection(creator_id=creator_id, reason="detector_unavailable", http_status=503)
         return jsonify({"error": "detector_unavailable", "message": str(exc)}), 503
     except ValueError:
         # Fewer than 3 tokens: nothing for the model to be surprised by.
         audit.log_rejection(creator_id=creator_id, reason="too_short", http_status=400)
-        return jsonify({
-            "error": "too_short",
-            "message": "This is too short to look at. Send at least a sentence or two.",
-        }), 400
+        return jsonify({"error": "too_short",
+                        "message": "This is too short to look at. Send at least a sentence or two."}), 400
 
-    # ── 3. Signal two: the shape of the text ─────────────────────────────
+    # Milestone 4 - the second signal, and one number from two
     style_score = stylometry.style_signal(text)
-
-    # ── 4. One number from two ───────────────────────────────────────────
     combined = round(scoring.combine_signals(model_score, style_score), 4)
 
-    # ── 5. The number a person can read ──────────────────────────────────
+    # Milestone 5 - the number a person can read
     word_count = len(stylometry.words(text))
     guess, label = scoring.score_to_label(combined, word_count=word_count)
 
-    # ── 6. Log it, then answer ───────────────────────────────────────────
+    # Step 4 - log the decision. The content_id is what /appeal needs later.
+    content_id = f"c_{uuid.uuid4().hex[:12]}"
     audit.log_decision(
         content_id=content_id,
         creator_id=creator_id,
-        guess=guess,
         model_score=model_score,
+        status="decided",
+        # Added in Milestones 4-5: the rest of what the log needs.
         style_score=style_score,
         combined_score=combined,
+        guess=guess,
         label=label,
-        status="decided",
         word_count=word_count,
     )
 
+    # Step 1's response, now with real values
     return jsonify({
         "content_id": content_id,
         "guess": guess,
@@ -265,29 +282,23 @@ def submit():
         "model_score": model_score,
         "style_score": style_score,
         "status": "decided",
-    })
+    }), 200
+
+
+def _who(creator_id):
+    """The creator_id to log a refusal under: theirs if usable, else 'unknown'."""
+    return creator_id.strip() if isinstance(creator_id, str) and creator_id.strip() else "unknown"
 
 
 def _check_submission(payload):
     """
-    What's wrong with this request, if anything.
+    The input checks Step 2 doesn't cover: text that's too long, and a
+    missing creator_id. Step 2 has already made sure `text` is a non-empty
+    string.
 
     Returns None when it's fine, otherwise (http_status, error_code, message).
-    Every refusal here is a 4xx with a reason. None of them reach a model.
     """
-    if not isinstance(payload, dict):
-        return 400, "invalid_body", (
-            'Send a JSON object like {"text": "...", "creator_id": "..."} '
-            "with Content-Type: application/json."
-        )
-
-    text = payload.get("text")
-    if "text" not in payload or text is None:
-        return 400, "missing_text", "The request needs a \"text\" field."
-    if not isinstance(text, str):
-        return 400, "invalid_text", "\"text\" has to be a string."
-    if not text.strip():
-        return 400, "empty_text", "\"text\" is empty. There's nothing to look at."
+    text = payload["text"]
     if len(text) > config.MAX_TEXT_CHARS:
         return 413, "text_too_long", (
             f"\"text\" is {len(text):,} characters. The limit is "

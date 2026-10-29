@@ -5,7 +5,7 @@
 | # | Where | What it adds |
 |---|---|---|
 | 1 | `POST /submit` (`app.py::submit`) | Receives JSON with `text` and `creator_id`. |
-| 2 | Input check (`app.py::_check_submission`) | Refuses anything malformed with a 4xx and a reason (no `text`, empty, not a string, over 20,000 characters, no `creator_id`, body not a JSON object). Each refusal is logged. Nothing malformed reaches a model. |
+| 2 | Input check (Step 2 in `app.py::submit`, plus `_check_submission`) | Refuses anything malformed with a 4xx and a reason (no `text`, empty, not a string, over 20,000 characters, no `creator_id`, body not a JSON object). Each refusal is logged. Nothing malformed reaches a model. |
 | 3 | Signal one (`detector.py::model_signal`) | A 0–1 score for how predictable the text is to gpt2. Higher means more AI-like. |
 | 4 | Signal two (`stylometry.py::style_signal`) | A 0–1 score for the shape of the text: sentence-length spread, vocabulary variety, expressive punctuation. Higher means more AI-like. |
 | 5 | Combine (`scoring.py::combine_signals`) | One 0–1 score: 0.6 × model + 0.4 × style, capped at 0.69 if either signal leans human. |
@@ -76,7 +76,7 @@ have, which is why every appeal has to be recorded (criterion 4).
 
 | Field | Type | Meaning |
 |---|---|---|
-| `content_id` | string | 12 hex characters. Needed to appeal. |
+| `content_id` | string | `c_` followed by 12 hex characters. Needed to appeal. |
 | `guess` | string | `"human"`, `"unsure"` or `"ai"`. |
 | `confidence` | number 0–1 | The combined score. 0 = confidently human, 1 = confidently AI. |
 | `label` | string | The sentence shown to a reader. |
@@ -89,7 +89,7 @@ have, which is why every appeal has to be recorded (criterion 4).
 | Status | `error` | When |
 |---|---|---|
 | 400 | `invalid_body` | Body isn't a JSON object. |
-| 400 | `missing_text` / `invalid_text` / `empty_text` | `text` is missing or null / not a string / blank. |
+| 400 | `bad_request` | `text` is missing, null, not a string, or blank. |
 | 400 | `missing_creator_id` | `creator_id` missing or blank. |
 | 400 | `too_short` | Under 3 model tokens: nothing to score. |
 | 413 | `text_too_long` | Over 20,000 characters. |
