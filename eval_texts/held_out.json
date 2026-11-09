@@ -1,0 +1,69 @@
+{
+ "_about": "Held-out texts for run_eval.py. None of these were in calibration/texts.json, so none were used to set weights or thresholds.",
+ "clearly_ai": [
+  {
+   "id": "ai_1",
+   "source": "AI-generated for the unit 8 eval; not in the calibration set and not used for tuning",
+   "text": "Reading regularly offers a wide range of benefits that extend far beyond entertainment. First and foremost, it strengthens cognitive function by improving memory, focus, and analytical thinking. Additionally, reading exposes individuals to new perspectives and ideas, fostering empathy and a deeper understanding of the world. Furthermore, studies have shown that reading before bed can reduce stress and improve sleep quality. In today's fast-paced digital age, setting aside time for a good book can serve as a valuable opportunity to slow down and reflect. Ultimately, cultivating a reading habit is an investment in personal growth that pays dividends throughout one's life."
+  },
+  {
+   "id": "ai_2",
+   "source": "AI-generated for the unit 8 eval; not in the calibration set and not used for tuning",
+   "text": "Urban green spaces play a crucial role in promoting the health and well-being of city residents. Parks, community gardens, and tree-lined streets provide opportunities for physical activity, social interaction, and relaxation. Moreover, green spaces help mitigate the effects of climate change by reducing urban heat islands and improving air quality. They also support biodiversity by offering habitats for birds, insects, and other wildlife. As cities continue to grow, it is essential for policymakers and urban planners to prioritize the creation and maintenance of green spaces. By doing so, communities can enjoy a higher quality of life while building a more sustainable future."
+  },
+  {
+   "id": "ai_3",
+   "source": "AI-generated for the unit 8 eval; not in the calibration set and not used for tuning",
+   "text": "Social media has had a profound impact on the way teenagers communicate and form relationships. On one hand, platforms such as Instagram and TikTok allow young people to stay connected with friends, express their creativity, and discover new interests. On the other hand, excessive use of social media has been linked to anxiety, depression, and low self-esteem. It is important for parents and educators to help teenagers develop healthy digital habits, such as setting time limits and engaging in offline activities. By striking a balance between online and offline life, teenagers can enjoy the benefits of social media while minimizing its potential harms."
+  },
+  {
+   "id": "ai_4",
+   "source": "AI-generated for the unit 8 eval; not in the calibration set and not used for tuning",
+   "text": "Getting enough sleep is essential for maintaining both physical and mental health. During sleep, the body repairs tissues, consolidates memories, and regulates important hormones. Adults generally need between seven and nine hours of sleep each night to function at their best. However, many people struggle to get adequate rest due to busy schedules, stress, and the use of electronic devices before bed. To improve sleep quality, experts recommend maintaining a consistent sleep schedule, creating a relaxing bedtime routine, and limiting screen time in the evening. By prioritizing sleep, individuals can boost their energy, mood, and overall well-being."
+  },
+  {
+   "id": "ai_5",
+   "source": "AI-generated for the unit 8 eval; not in the calibration set and not used for tuning",
+   "text": "Renewable energy sources such as solar, wind, and hydroelectric power are becoming increasingly important in the global effort to combat climate change. Unlike fossil fuels, these sources produce little to no greenhouse gas emissions, making them a cleaner and more sustainable alternative. In addition, advances in technology have significantly reduced the cost of renewable energy, making it more accessible to households and businesses alike. Despite these benefits, challenges such as energy storage and grid integration remain. Nevertheless, with continued investment and supportive policies, renewable energy has the potential to transform the way we power our world."
+  }
+ ],
+ "clearly_human": [
+  {
+   "id": "human_1",
+   "source": "Austen, Pride and Prejudice (Project Gutenberg #1342), paragraph 1383 of 2641, the first 120-220 word paragraph after the midpoint",
+   "text": "But when Elizabeth told of his silence, it did not seem very likely, even to Charlotte’s wishes, to be the case; and, after various conjectures, they could at last only suppose his visit to proceed from the difficulty of finding anything to do, which was the more probable from the time of year. All field sports were over. Within doors there was Lady Catherine, books, and a billiard table, but gentlemen cannot be always within doors; and in the nearness of the Parsonage, or the pleasantness of the walk to it, or of the people who lived in it, the two cousins found a temptation from this period of walking thither almost every day. They called at various times of the morning, sometimes separately, sometimes together, and now and then accompanied by their aunt. It was plain to them all that Colonel Fitzwilliam came because he had pleasure in their society, a persuasion which of course recommended him still more; and Elizabeth was reminded by her own satisfaction in being with him, as well as by his evident admiration, of her former favourite, George Wickham; and though, in comparing them, she saw there was less captivating softness in Colonel Fitzwilliam’s manners, she believed he might have the best informed mind."
+  },
+  {
+   "id": "human_2",
+   "source": "Dickens, A Christmas Carol (Project Gutenberg #46), paragraph 381 of 730, the first 120-220 word paragraph after the midpoint",
+   "text": "Then up rose Mrs. Cratchit, Cratchit's wife, dressed out but poorly in a twice-turned gown, but brave in ribbons, which are cheap and make a goodly show for sixpence; and she laid the cloth, assisted by Belinda Cratchit, second of her daughters, also brave in ribbons; while Master Peter Cratchit plunged a fork into the saucepan of potatoes, and getting the corners of his monstrous shirt collar (Bob's private property, conferred upon his son and heir in honour of the day) into his mouth, rejoiced to find himself so gallantly attired, and yearned to show his linen in the fashionable Parks. And now two smaller Cratchits, boy and girl, came tearing in, screaming that outside the baker's they had smelt the goose, and known it for their own; and basking in luxurious thoughts of sage and onion, these young Cratchits danced about the table, and exalted Master Peter Cratchit to the skies, while he (not proud, although his collars nearly choked him) blew the fire, until the slow potatoes bubbling up, knocked loudly at the saucepan-lid to be let out and peeled."
+  },
+  {
+   "id": "human_3",
+   "source": "Shelley, Frankenstein (Project Gutenberg #84), paragraph 416 of 833, the first 120-220 word paragraph after the midpoint",
+   "text": "“The Turk allowed this intimacy to take place and encouraged the hopes of the youthful lovers, while in his heart he had formed far other plans. He loathed the idea that his daughter should be united to a Christian, but he feared the resentment of Felix if he should appear lukewarm, for he knew that he was still in the power of his deliverer if he should choose to betray him to the Italian state which they inhabited. He revolved a thousand plans by which he should be enabled to prolong the deceit until it might be no longer necessary, and secretly to take his daughter with him when he departed. His plans were facilitated by the news which arrived from Paris."
+  },
+  {
+   "id": "human_4",
+   "source": "Melville, Moby Dick (Project Gutenberg #2701), paragraph 1421 of 2843, the first 120-220 word paragraph after the midpoint",
+   "text": "In the second engraving, the boat is in the act of drawing alongside the barnacled flank of a large running Right Whale, that rolls his black weedy bulk in the sea like some mossy rock-slide from the Patagonian cliffs. His jets are erect, full, and black like soot; so that from so abounding a smoke in the chimney, you would think there must be a brave supper cooking in the great bowels below. Sea fowls are pecking at the small crabs, shell-fish, and other sea candies and maccaroni, which the Right Whale sometimes carries on his pestilent back. And all the while the thick-lipped leviathan is rushing through the deep, leaving tons of tumultuous white curds in his wake, and causing the slight boat to rock in the swells like a skiff caught nigh the paddle-wheels of an ocean steamer. Thus, the foreground is all raging commotion; but behind, in admirable artistic contrast, is the glassy level of a sea becalmed, the drooping unstarched sails of the powerless ship, and the inert mass of a dead whale, a conquered fortress, with the flag of capture lazily hanging from the whale-pole inserted into his spout-hole."
+  },
+  {
+   "id": "human_5",
+   "source": "Alcott, Little Women (Project Gutenberg #514), paragraph 1976 of 3921, the first 120-220 word paragraph after the midpoint",
+   "text": "Mr. March told how he had longed to surprise them, and how, when the fine weather came, he had been allowed by his doctor to take advantage of it, how devoted Brooke had been, and how he was altogether a most estimable and upright young man. Why Mr. March paused a minute just there, and after a glance at Meg, who was violently poking the fire, looked at his wife with an inquiring lift of the eyebrows, I leave you to imagine. Also why Mrs. March gently nodded her head and asked, rather abruptly, if he wouldn’t like to have something to eat. Jo saw and understood the look, and she stalked grimly away to get wine and beef tea, muttering to herself as she slammed the door, “I hate estimable young men with brown eyes!”"
+  }
+ ],
+ "borderline": [
+  {
+   "id": "border_ai_casual",
+   "source": "AI-generated for the unit 8 eval, then rewritten by the same AI into a casual voice (a rewrite of clearly_ai ai_2)",
+   "text": "ok so the whole 'cities need more parks' thing? kind of true actually. parks are where people walk, hang out, let their kids run around - and trees make the street noticeably cooler in summer, which matters more every year. you also get birds and bees back, which is nice. the problem is land is expensive and parks don't make anyone money, so they're always first to get cut. if planners actually protected them we'd all be a bit healthier. probably."
+  },
+  {
+   "id": "border_human_formal",
+   "source": "Hamilton/Madison/Jay, The Federalist Papers (Project Gutenberg #1404), paragraph 946 of 1884, the first 120-220 word paragraph after the midpoint",
+   "text": "Among the lesser criticisms which have been exercised on the Constitution, it has been remarked that the validity of engagements ought to have been asserted in favor of the United States, as well as against them; and in the spirit which usually characterizes little critics, the omission has been transformed and magnified into a plot against the national rights. The authors of this discovery may be told, what few others need to be informed of, that as engagements are in their nature reciprocal, an assertion of their validity on one side, necessarily involves a validity on the other side; and that as the article is merely declaratory, the establishment of the principle in one case is sufficient for every case. They may be further told, that every constitution must limit its precautions to dangers that are not altogether imaginary; and that no real danger can exist that the government would DARE, with, or even without, this constitutional declaration before it, to remit the debts justly due to the public, on the pretext here condemned."
+  }
+ ]
+}
