@@ -325,24 +325,46 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
 
 ## Rate Limiting
 
-**My limits:** ___ per minute, ___ per day
+**My limits:** 5 per minute, 50 per day (`config.py`, `RATE_LIMIT_PER_MINUTE`
+and `RATE_LIMIT_PER_DAY`)
 
 **Why those numbers and not others:**
-<!-- Think about two people: a real writer submitting their own work a few
-     times an hour, and a script sending a thousand variations to map your
-     thresholds. Your numbers have to be liveable for the first and hostile to
-     the second. -->
+A writer checking their own work sends a piece, reads the answer, edits and
+sends it again. That's a few submissions a minute at most, and even a long
+editing session doesn't come near 50 in a day. A script trying to map my
+thresholds needs hundreds of small variations. At 5 a minute and 50 a day,
+one creator_id gets 50 probes a day, not a thousand. I didn't keep the
+starter's 10/minute and 200/day because 200 probes a day is enough to find
+my 0.45 and 0.70 thresholds in an afternoon. I didn't go lower than 5 a
+minute because someone pasting several short pieces in a row would hit the
+limit while using the site normally.
 
-**What a caller counts as:** <!-- per address, or per creator_id? They fail
-differently — one script can look like a thousand callers, and one household
-can look like one. -->
+**What a caller counts as:** the `creator_id` in the request, falling back
+to the caller's address when there isn't a usable one
+(`app.py::rate_limit_key`). That has two weak spots:
+
+- A script can make up a new `creator_id` for every request, and each new id
+  gets its own fresh 5 and 50. A per-creator limit only stops a caller who
+  keeps the same name.
+- Anyone can send someone else's `creator_id` and use up that writer's
+  allowance for the day, locking them out.
+
+Malformed requests with no `creator_id` all count against one address, so
+on my laptop they share a single allowance.
 
 **The run of status codes when I pushed past it:**
 
-<!-- python run_attacks.py --flood 15 -->
+`python run_attacks.py --flood 15` (15 submissions as `flood_tester`,
+`results/flood_2026-11-08_2101.md`):
 
 ```
+200 200 200 200 200 429 429 429 429 429 429 429 429 429 429
+```
 
+All 10 rejections are in `logs/audit.jsonl`, for example:
+
+```json
+{"timestamp": "2026-11-09T02:01:38+00:00", "creator_id": "flood_tester", "event": "rejected", "status": "rejected", "reason": "rate_limited", "limit": "5 per 1 minute"}
 ```
 
 ---
