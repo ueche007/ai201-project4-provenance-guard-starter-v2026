@@ -319,33 +319,37 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
   moved it across two labels. That's the style signal's blind spot, and I'm
   keeping it as a test case for unit 8.
 
-**Unit 8, moment 1: topics for my own writing**
+**Unit 8, moment 1: choosing the rate limit**
 
-- *What I asked for:* criterion 1 needs ten pieces of my own writing, so I
-  asked Claude to set up `my_writing/` with an example for each topic that I
-  would rewrite.
-- *What came back:* ten short drafts (a Sunday dinner, a commute, a first
-  job, and so on), each starting with a `DRAFT` line. `scenarios.py` refuses
-  to run while any draft line is still there.
-- *What I changed:* I rewrote all ten in my own words and deleted the draft
-  lines. The pieces keep the drafts' topics and order of ideas. When I saved
-  them, Claude asked whether a tool had done the rewriting, because eight had
-  curly apostrophes and nine were saved within twenty seconds. I confirmed I wrote the
-  sentences myself, and `my_writing/README.md` says how the pieces were made.
+- *What I asked for:* help turning on rate limiting for `/submit` and
+  picking numbers I could defend.
+- *What came back:* three options, each with what it means for a real
+  writer, for a script probing my thresholds, and for the 15-request flood
+  test: 3/minute and 30/day, 5 and 50, or the starter's 10 and 200. Claude
+  also pointed out that my limit counts per `creator_id`, falling back to the
+  caller's address, so a script can dodge it by inventing new ids. It
+  drafted the Rate Limiting section from the flood test.
+- *What I changed:* I chose 5 a minute and 50 a day. The flood test then gave
+  five 200s and ten 429s. The attack run showed a cost I hadn't thought
+  about: malformed requests with no `creator_id` share one address's
+  allowance, so RQ10 and RQ11 were rate-limited before my route ever saw
+  them.
 
-**Unit 8, moment 2: the test harness and the diagnoses**
+**Unit 8, moment 2: choosing the one improvement**
 
-- *What I asked for:* Claude ran the attack set and my criteria with me. It
-  extended `run_eval.py` to test appeals and non-object bodies, gathered
-  held-out texts (new public-domain passages plus new AI pieces), and
-  drafted the held/broke marks and the diagnoses from the numbers.
-- *What came back:* the evidence that shaped the write-up. The veto decided
-  none of the 15 broken attacks, signal two broke on shape-only edits, and
-  the four false positives sat between 0.7495 and 0.7765. Claude also suggested
-  three candidate fixes with what each would cost.
-- *What I changed:* I chose the improvement (AI threshold 0.70 to 0.78) and
-  the rate limits (5 a minute, 50 a day), and I reviewed the drafted
-  diagnoses before submitting.
+- *What I asked for:* which single change my results actually supported,
+  since the rules allow only one.
+- *What came back:* Claude drafted the diagnoses from the run numbers. It
+  found that my veto decided none of the 15 broken attacks, and that the four
+  false positives scored between 0.7495 and 0.7765, with both signals agreeing.
+  It offered three options with their costs: raise the AI threshold to 0.78,
+  reweight toward signal one, or lower the veto line. It noted the third
+  would change nothing, because the veto never decided a single break.
+- *What I changed:* I chose the threshold, because criterion 1 says a wrong
+  accusation is the expensive mistake. After re-running, false positives went
+  from 4 to 0, and EV04 (AI text) started getting through, the trade I'd
+  accepted. Claude drafted The Improvement and What's Still Broken from the
+  before and after runs.
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
