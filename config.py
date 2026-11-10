@@ -87,7 +87,8 @@ VETO_BELOW = 0.5
 # that decide who pays for it.
 
 #
-# Mine: below 0.45 is human, above 0.70 is AI, 0.45-0.70 is unsure. Set from 24
+# Mine (unit 7; unit 8 raised the AI line to 0.78, see below): below 0.45 is
+# human, above 0.70 is AI, 0.45-0.70 is unsure. Set from 24
 # calibration texts (README, "Signals and Scoring"): no human passage scored
 # above 0.54, so 0.70 leaves a margin of 0.16 before anyone is accused. The
 # rewritten AI pieces (0.53, 0.69) land in unsure, and that's the trade
