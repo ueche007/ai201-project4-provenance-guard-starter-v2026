@@ -329,8 +329,8 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
   to run while any draft line is still there.
 - *What I changed:* I rewrote all ten in my own words and deleted the draft
   lines. The pieces keep the drafts' topics and order of ideas. When I saved
-  them, Claude asked whether a tool had done the rewriting, because nine had
-  curly apostrophes and were saved seconds apart. I confirmed I wrote the
+  them, Claude asked whether a tool had done the rewriting, because eight had
+  curly apostrophes and nine were saved within twenty seconds. I confirmed I wrote the
   sentences myself, and `my_writing/README.md` says how the pieces were made.
 
 **Unit 8, moment 2: the test harness and the diagnoses**
@@ -341,7 +341,7 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
   drafted the held/broke marks and the diagnoses from the numbers.
 - *What came back:* the evidence that shaped the write-up. The veto decided
   none of the 15 broken attacks, signal two broke on shape-only edits, and
-  the four false positives sat between 0.750 and 0.776. Claude also suggested
+  the four false positives sat between 0.7495 and 0.7765. Claude also suggested
   three candidate fixes with what each would cost.
 - *What I changed:* I chose the improvement (AI threshold 0.70 to 0.78) and
   the rate limits (5 a minute, 50 a day), and I reviewed the drafted
@@ -363,7 +363,7 @@ editing session doesn't come near 50 in a day. A script trying to map my
 thresholds needs hundreds of small variations. At 5 a minute and 50 a day,
 one creator_id gets 50 probes a day, not a thousand. I didn't keep the
 starter's 10/minute and 200/day because 200 probes a day is enough to find
-my 0.45 and 0.70 thresholds in an afternoon. I didn't go lower than 5 a
+my 0.45 and 0.70 thresholds (0.78 after the unit 8 change) in an afternoon. I didn't go lower than 5 a
 minute because someone pasting several short pieces in a row would hit the
 limit while using the site normally.
 
@@ -497,8 +497,8 @@ held. Sent again on their own, both got a 400 from the route
 2. FP05, technical documentation written by a person, labelled AI.
 3. EV02, AI text with "Really." between sentences, labelled **human**.
 4. PI02, AI text under a fake "SYSTEM:" line, labelled human at 0.165.
-5. EV01, AI text with typos. Signal one dropped to 0.16 and vetoed the AI
-   call, while signal two stayed at 0.95.
+5. EV01, AI text with typos. Signal one fell to 0.16 and pulled the weighted
+   average down to 0.477 (unsure), while signal two stayed at 0.95.
 6. MF07, Arabic text: combined 0.902 and `word_count` 0. Only the word floor
    kept it out of the AI label.
 7. MF05, one 4,000-character word: combined 0.957, held only by the word floor.
@@ -894,13 +894,14 @@ look at what the text says, so an edit that adds no content can move it.
 | EV05 | a heavy human editing pass: spread 0.68 (AI-ness 0.04), and perplexity up to 71.8 | 0.289 | 0.308 human |
 | EV07 | "; and, moreover," between sentences: punctuation 7.2 per 100 words (AI-ness 0.00), and the text becomes one sentence, so the spread measure drops out | 0.327 | 0.482 unsure |
 | EV03 | a pasted quotation adds quotation marks (punctuation AI-ness 0.00) and some spread (0.44) | 0.449 | 0.579 unsure |
-| EV09 | a human opening paragraph brings a "?" and apostrophes (punctuation AI-ness 0.05) and longer sentences | 0.412 | 0.587 unsure |
+| EV09 | a human opening paragraph brings apostrophes (punctuation AI-ness 0.05) and longer sentences | 0.412 | 0.587 unsure |
 | PI01 | three short instruction sentences in front: spread 0.66 (AI-ness 0.05) | 0.258 | 0.381 human |
 | PI03 | a note in parentheses brings punctuation (AI-ness 0.00); signal one still lands mid-range at 0.594 | 0.621 | 0.605 unsure |
 
 In five of these (EV02, EV03, EV06, EV07, EV09), signal one still leaned AI
 (0.573–0.704), but with signal two that low the weighted average can't reach
-0.70. This is the blind spot I named in unit 7:
+0.70. PI03 is different: both signals landed mid-range (0.594 and 0.621),
+so it scored 0.605. This is the blind spot I named in unit 7:
 signal two can't tell a writer's voice from a few edits.
 
 **Problem 2. Signal one reads unusual tokens as human (3 breaks).** Stage:
@@ -938,7 +939,7 @@ of similar length (low spread), and no expressive punctuation (punctuation
 AI-ness 0.90 in all four). I picked two signals that "measure different
 things", but both end up measuring regularity, and these writers are regular
 on purpose or by necessity. Because the two signals agree, the veto never
-applies. All four scores are between 0.750 and 0.776, just over my 0.70 line.
+applies. All four scores are between 0.7495 and 0.7765, just over my 0.70 line.
 
 **The pattern.** Problems 1 and 2 let AI text through; problem 3 accuses
 people. Problem 3 is the one my criteria say matters most (criterion 1), and
@@ -958,7 +959,7 @@ signal or other threshold changed.
 **Which diagnosis pointed at it:** problem 3. Four human pieces (FP02-FP05)
 were labelled AI. Both signals agreed on them, so neither the veto nor a
 reweighting could separate them. All four scored in a narrow band,
-0.750-0.776, just over 0.70. The only stage that could stop those
+0.7495-0.7765, just over 0.70. The only stage that could stop those
 accusations without rebuilding a signal was the label mapping. I didn't
 target problems 1 and 2, which let AI text through, because criterion 1 says
 wrongly accusing a writer is the expensive mistake.
@@ -1036,8 +1037,8 @@ Every attack in the after run:
 | RQ07 | malformed | body is a JSON array, not an object | 400 | — | — | — | — | **HELD** |  |
 | RQ08 | malformed | body is unparseable JSON | 400 | — | — | — | — | **HELD** |  |
 | RQ09 | malformed | body is empty | 400 | — | — | — | — | **HELD** |  |
-| RQ10 | malformed | body is form-encoded, not JSON | 429 | — | — | — | — | **NOT REACHED** | never reached the route: shared-address limit. Re-sent alone: 400 |
-| RQ11 | malformed | body is JSON claiming to be plain text | 429 | — | — | — | — | **NOT REACHED** | never reached the route: shared-address limit. Re-sent alone: 400 |
+| RQ10 | malformed | body is form-encoded, not JSON | 429 | — | — | — | — | **NOT REACHED** | never reached the route: shared-address limit. re-sent alone after the before run: 400 |
+| RQ11 | malformed | body is JSON claiming to be plain text | 429 | — | — | — | — | **NOT REACHED** | never reached the route: shared-address limit. re-sent alone after the before run: 400 |
 | RQ12 | malformed | deeply nested JSON | 400 | — | — | — | — | **HELD** |  |
 | FL01_01 | flood_same_creator | 20 rapid submissions from one creator | 200 | unsure | 0.3752 | 0.0287 | 0.895 | **HELD** |  |
 | FL01_02 | flood_same_creator | 20 rapid submissions from one creator | 200 | unsure | 0.3752 | 0.0287 | 0.895 | **HELD** |  |
@@ -1072,9 +1073,22 @@ Every attack in the after run:
 | 4. Appeals recorded; bad ones refused | 10/10 appeals recorded; 3/3 unknown → 404, no entry; 3/3 empty → 400 | 10/10, 3/3, 3/3 | 10/10, 3/3, 3/3 | 10/10, 3/3, 3/3 | MET |
 | 5. Bad input never crashes | 7/7: no 5xx, 4xx with JSON error, rejected entry logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | MET |
 
+**A caveat on criterion 5 after the change.** The table counts 7/7, but
+one of the seven didn't reach my route. The body that isn't a JSON object
+came back **429 `rate_limited`** in all three trials, not 400
+`invalid_body`. It has no `creator_id`, so it counts against my address,
+and the after attack run had used up that allowance 12 seconds earlier.
+A 429 meets the letter of the target (a 4xx, a JSON `error`, a `rejected`
+entry in the log), so the verdict stays MET. But by the standard I used
+for RQ10 and RQ11, that input wasn't re-tested after the change. The
+other 6 of 7 reached the route and were refused with a 400 or 413, the
+same as before. My threshold change can't affect input checks, which run
+before any score, but I didn't measure that for this input.
+
 **Did it help, and how do I know:** yes, for the problem it targeted, and
 it cost what I expected. False positives in the attack set went from 4 to 0,
-and my five criteria are still met in all three trials. The price is on the
+and my five criteria are still met in all three trials (with the criterion 5
+caveat above). The price is on the
 other side:
 
 - **EV04** (AI text, 0.744) is no longer called AI.
@@ -1127,7 +1141,7 @@ through and the near misses.
 - **Near misses that held only because of the 40-word floor: MF05, MF06,
   MF07.** A 4,000-character "aaaa…" scored 0.957, emoji 0.956, and Arabic
   text 0.902, with `word_count` 0 because `stylometry.py::words` only counts
-  a-z and 0-9. A 40-word Arabic paragraph would still have `word_count` 0
+  a-z, 0-9 and apostrophes. A 40-word Arabic paragraph would still have `word_count` 0
   and would stay "unsure". But the response still carries `confidence: 0.90`,
   which a writer would read as an accusation. *What I'd do:* refuse or
   clearly flag text that isn't mostly Latin script, because neither signal
