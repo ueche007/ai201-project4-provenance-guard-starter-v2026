@@ -1137,7 +1137,10 @@ through and the near misses.
   the log just say `creator_id: "unknown"`, so I can't tell which request
   each one was. *What I'd do:* write the route, content type and caller
   address into rejection entries. *Why I stopped:* the log was finished in
-  Milestone 1, and the rule allows one improvement.
+  Milestone 1, and the rule allows one improvement. The same limit hid one
+  criterion 5 input in the after eval, and `run_eval.py::measure` counted its
+  429 as a pass. I'd make `measure` count a 429 as "not reached", and leave a
+  minute between the attack run and the eval.
 - **Near misses that held only because of the 40-word floor: MF05, MF06,
   MF07.** A 4,000-character "aaaa…" scored 0.957, emoji 0.956, and Arabic
   text 0.902, with `word_count` 0 because `stylometry.py::words` only counts
