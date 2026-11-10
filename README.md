@@ -348,8 +348,7 @@ it with `status: under_review`. `GET /content/34a309e5c322` now reports
 - *What I changed:* I chose the threshold, because criterion 1 says a wrong
   accusation is the expensive mistake. After re-running, false positives went
   from 4 to 0, and EV04 (AI text) started getting through, the trade I'd
-  accepted. Claude drafted The Improvement and What's Still Broken from the
-  before and after runs.
+  accepted. 
 
 <!-- ═══════════════════════ UNIT 8 — THE TEST ═══════════════════════ -->
 
