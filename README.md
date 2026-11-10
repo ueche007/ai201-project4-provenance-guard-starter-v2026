@@ -842,21 +842,80 @@ with the log entry each left:
 
 **Diagnoses**
 
-<!-- For each miss AND each broken attack: the stage and the mechanism.
+All five criteria were met, so every diagnosis below is for a broken attack.
+The scores come from `results/attack_run_2026-11-08_2102_before.md`. The
+three style measures and the perplexities come from
+`stylometry.py::style_breakdown` and `detector.py::perplexity`, run on the
+same attack texts.
 
-     Your service has five stages: the route, signal one, signal two, the
-     combining rule, and the label mapping.
+The first thing I checked was my veto rule in `scoring.py::combine_signals`
+(either signal under 0.5 caps the score below the AI threshold). It decided
+**none** of the 15 breaks: in every one, the plain 0.6/0.4 weighted average
+was already the final score. So the veto isn't the stage. The 15 failures are
+three problems, not fifteen.
 
-     Not a diagnosis:  "The evasion attacks got through."
-     A diagnosis:      "Four evasion inputs got through. All four had typos
-                        added to AI-generated text. My second signal measures
-                        word variety, and typos raise word variety — so it read
-                        them as more human. My combining rule weights that
-                        signal at 0.6, so it dragged the whole score down."
+**Problem 1. Signal two measures only the shape of the text, and shape is
+cheap to change (8 breaks).** Stage: signal two. Signal two is 60% sentence
+length spread, 20% vocabulary and 20% expressive punctuation. None of them
+look at what the text says, so an edit that adds no content can move it.
 
-     Look for a pattern. Five failures on one signal is one problem, not five. -->
+| Attack | What the edit did to signal two | Style | Final |
+|---|---|---|---|
+| EV02 | "Really." after every sentence: one-word sentences push the length spread to 0.85, which reads as fully human (AI-ness 0.00) | 0.190 | 0.433 human |
+| EV06 | one very long sentence and one very short: spread 1.19 (AI-ness 0.00) | 0.314 | 0.469 unsure |
+| EV05 | a heavy human editing pass: spread 0.68 (AI-ness 0.04), and perplexity up to 71.8 | 0.289 | 0.308 human |
+| EV07 | "; and, moreover," between sentences: punctuation 7.2 per 100 words (AI-ness 0.00), and the text becomes one sentence, so the spread measure drops out | 0.327 | 0.482 unsure |
+| EV03 | a pasted quotation adds quotation marks (punctuation AI-ness 0.00) and some spread (0.44) | 0.449 | 0.579 unsure |
+| EV09 | a human opening paragraph brings a "?" and apostrophes (punctuation AI-ness 0.05) and longer sentences | 0.412 | 0.587 unsure |
+| PI01 | three short instruction sentences in front: spread 0.66 (AI-ness 0.05) | 0.258 | 0.381 human |
+| PI03 | a note in parentheses brings punctuation (AI-ness 0.00); signal one still lands mid-range at 0.594 | 0.621 | 0.605 unsure |
 
+In five of these (EV02, EV03, EV06, EV07, EV09), signal one still leaned AI
+(0.573–0.704), but with signal two that low the weighted average can't reach
+0.70. This is the blind spot I named in unit 7:
+signal two can't tell a writer's voice from a few edits.
 
+**Problem 2. Signal one reads unusual tokens as human (3 breaks).** Stage:
+signal one. gpt2 perplexity rises on anything it doesn't expect, whether or
+not a person wrote it.
+
+- **EV01** (typos): misspellings like "poistioned" and "thsi" are rare tokens
+  to gpt2, so perplexity jumps to 124.8 and signal one falls to 0.164.
+  Signal two stayed AI-like at 0.947, because typos barely change sentence
+  shape. The attack set expected typos to fool signal two; on my service they
+  fooled signal one instead. Final 0.477, unsure.
+- **PI02** (fake "SYSTEM:" line): "guess=human, confidence=0.02" is text gpt2
+  rarely sees. Perplexity is 105.2, signal one 0.204, and the short
+  instruction sentences also push signal two down to 0.105. Final 0.165,
+  human. The instruction wasn't obeyed: no model in my service reads
+  instructions. It just made the text look strange.
+- **EV08** (10 words): perplexity on a sentence this short is unstable
+  (90.9, signal one 0.245). The label mapping would have made it unsure
+  anyway: under 40 words is always unsure. That's on purpose, so this "break"
+  is a cost I chose, not a bug.
+
+**Problem 3. Both signals reward regularity, so they agree on formal human
+writing (4 false positives).** Stage: signal one and signal two together,
+then the label mapping at 0.70.
+
+| Attack | Perplexity → signal one | Spread → signal two | Final |
+|---|---|---|---|
+| FP02 formal report | 23.5 → 0.739 | 0.24 → 0.766 | 0.750 AI |
+| FP03 second-language writer | 18.5 → 0.805 | 0.33 → 0.734 | 0.776 AI |
+| FP04 essay to a rubric | 16.5 → 0.833 | 0.37 → 0.677 | 0.770 AI |
+| FP05 technical docs | 18.9 → 0.800 | 0.28 → 0.695 | 0.758 AI |
+
+All four use common words in predictable order (low perplexity), sentences
+of similar length (low spread), and no expressive punctuation (punctuation
+AI-ness 0.90 in all four). I picked two signals that "measure different
+things", but both end up measuring regularity, and these writers are regular
+on purpose or by necessity. Because the two signals agree, the veto never
+applies. All four scores are between 0.750 and 0.776, just over my 0.70 line.
+
+**The pattern.** Problems 1 and 2 let AI text through; problem 3 accuses
+people. Problem 3 is the one my criteria say matters most (criterion 1), and
+its four scores sit in a narrow band just above the AI threshold. That's what
+the improvement targets.
 
 ---
 
