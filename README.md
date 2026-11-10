@@ -510,21 +510,334 @@ this person before I built anything.
 
 ## Run Log and Verdicts
 
-<!-- Your five criteria across three trials. `run_eval.py --label before`. -->
+`python run_eval.py --label before`, written to `results/run_2026-11-09_2239_before.md`. The inputs are in
+`scenarios.py`: my own writing in `my_writing/` (criterion 1), held-out texts
+in `eval_texts/held_out.json` that weren't used to tune anything
+(criteria 2-4), and the instructor's samples. Each Run cell is the number
+`run_eval.py::measure` worked out for that trial. A verdict is MET only if
+the target held in all three trials.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. My own writing called AI | ≤ 1 of 10 labelled AI, 0 of 4 plain, every trial | 0/10 AI, 0/4 plain | 0/10 AI, 0/4 plain | 0/10 AI, 0/4 plain | MET |
+| 2. AI and human scores far apart | mean AI − mean human ≥ 0.25, every trial | 0.871 − 0.349 = 0.522 | 0.871 − 0.349 = 0.522 | 0.871 − 0.349 = 0.522 | MET |
+| 3. All three labels reachable, no gaps | (a) 101/101 map to one label; (b) 3/3 labels seen, every trial | (a) 101/101; (b) 3/3 (ai, human, unsure) | (a) 101/101; (b) 3/3 (ai, human, unsure) | (a) 101/101; (b) 3/3 (ai, human, unsure) | MET |
+| 4. Appeals recorded; bad ones refused | 10/10 appeals recorded; 3/3 unknown → 404, no entry; 3/3 empty → 400 | 10/10, 3/3, 3/3 | 10/10, 3/3, 3/3 | 10/10, 3/3, 3/3 | MET |
+| 5. Bad input never crashes | 7/7: no 5xx, 4xx with JSON error, rejected entry logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | 7/7 no 5xx, 7/7 4xx+error, 7/7 logged | MET |
 
-**Real output from one trial**, pasted as text, naming the file and function
-that produced it:
+**How I decided each verdict.** I compared each trial's number with the
+target in `criteria.md`, without rounding in my favour.
+
+1. **MET.** 0 of 10 pieces labelled AI in every trial, against a limit of
+   1, and none of the 4 plain pieces. It was close: `plain_04_my_dog` scored
+   0.6958, 0.004 below my AI threshold of 0.70.
+2. **MET.** The AI set averaged 0.871 and the human set 0.349, a gap of
+   0.522 against a target of 0.25, in every trial.
+3. **MET.** (a) All 101 swept scores mapped to exactly one label. (b) The
+   9-piece set produced all three labels in every trial. "Unsure" came from
+   only one piece, though: the formal Federalist passage (0.6075). The other
+   two borderline pieces, including the AI piece rewritten in a casual voice,
+   were labelled human.
+4. **MET.** 10/10 appeals returned 200 and left an `appeal` entry with the
+   reasoning and `status: under_review`. 3/3 unknown ids returned 404 with no
+   appeal entry. 3/3 empty reasonings returned 400.
+5. **MET.** All 7 malformed requests returned a 4xx with a JSON `error`
+   field, and each left a `rejected` entry in the log, read back by
+   `run_eval.py::submit_and_record`.
+
+All three trials returned identical scores for every input. Neither signal
+is random (gpt2 perplexity and text statistics), so that's expected.
+
+**Did I hold everything because my targets were low?** Partly, yes.
+Criterion 1 held on my ten pieces, but the attack set's human pieces in a
+formal register, from a second-language writer, written to a rubric, and
+technical docs (FP02-FP05) were all labelled AI. My ten pieces didn't include
+writing like that. Criterion 2's target of 0.25 was met twice over, because
+"clearly AI" and "clearly human" are the easy cases by design. The one I'd
+tighten is **criterion 1**: test it on 10 pieces that include formal,
+second-language and rubric-style writing, because that's who the attack run
+shows getting accused.
+
+**Real output from trial 1**, verbatim from `results/run_2026-11-09_2239_before.md`. The service's answers
+come from `app.py::submit` and `app.py::appeal`; `run_eval.py::main`
+recorded them.
+
+Criterion 1, `plain_04_my_dog.txt` (closest to the AI line) and
+`regular_06_movie.txt` (the only one labelled human):
 
 ```json
+[
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.6958,
+    "model_score": 0.6455,
+    "style_score": 0.7712,
+    "label": "We can't tell either way, so we're not making a call. Our checks gave mixed or weak results, which happens often with writing people did themselves, especially short or plainly worded pieces. This is not a finding that AI was used, and nothing happens to the piece or its writer because of it.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "Our family has a dog called Rocky. He is a brown mixed breed and just "
+  },
+  {
+    "status": 200,
+    "guess": "human",
+    "confidence": 0.3952,
+    "model_score": 0.5606,
+    "style_score": 0.1472,
+    "label": "This looks like a person wrote it. Our checks found nothing that suggests it was generated by AI.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "I finally saw the movie everyone kept recommending, and I understand t"
+  }
+]
+```
 
+Criterion 2, the first clear-AI and the first clear-human piece (all ten are
+in the results file):
+
+```json
+[
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.7906,
+    "model_score": 0.7965,
+    "style_score": 0.7818,
+    "label": "This piece shows strong signs of being generated by AI: both of our checks point that way. Automated checks can be wrong. If you wrote this yourself, you can appeal, and a person will review it.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "Reading regularly offers a wide range of benefits that extend far beyo"
+  },
+  {
+    "status": 200,
+    "guess": "human",
+    "confidence": 0.3329,
+    "model_score": 0.4607,
+    "style_score": 0.1411,
+    "label": "This looks like a person wrote it. Our checks found nothing that suggests it was generated by AI.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "But when Elizabeth told of his silence, it did not seem very likely, e"
+  }
+]
+```
+
+Criterion 3, (a) the sweep at each side of both thresholds, from
+`run_eval.py::run_label_sweep` calling `scoring.py::score_to_label`, and
+(b) one piece for each label from the 9-piece set:
+
+```json
+[
+  {
+    "score": 0.44,
+    "guess": "human",
+    "has_label": true
+  },
+  {
+    "score": 0.45,
+    "guess": "unsure",
+    "has_label": true
+  },
+  {
+    "score": 0.7,
+    "guess": "unsure",
+    "has_label": true
+  },
+  {
+    "score": 0.71,
+    "guess": "ai",
+    "has_label": true
+  }
+]
+```
+
+```json
+[
+  {
+    "status": 200,
+    "guess": "ai",
+    "confidence": 0.7024,
+    "model_score": 0.7544,
+    "style_score": 0.6245,
+    "label": "This piece shows strong signs of being generated by AI: both of our checks point that way. Automated checks can be wrong. If you wrote this yourself, you can appeal, and a person will review it.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "The importance of effective time management cannot be overstated in to"
+  },
+  {
+    "status": 200,
+    "guess": "human",
+    "confidence": 0.3008,
+    "model_score": 0.4445,
+    "style_score": 0.0852,
+    "label": "This looks like a person wrote it. Our checks found nothing that suggests it was generated by AI.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "I didn't sleep. Not properly, anyway — I lay there listening to the bo"
+  },
+  {
+    "status": 200,
+    "guess": "unsure",
+    "confidence": 0.6075,
+    "model_score": 0.5186,
+    "style_score": 0.7409,
+    "label": "We can't tell either way, so we're not making a call. Our checks gave mixed or weak results, which happens often with writing people did themselves, especially short or plainly worded pieces. This is not a finding that AI was used, and nothing happens to the piece or its writer because of it.",
+    "error": null,
+    "not_json": null,
+    "logged": [
+      {
+        "event": null,
+        "status": "decided",
+        "reason": null,
+        "http_status": null
+      }
+    ],
+    "sent": "Among the lesser criticisms which have been exercised on the Constitut"
+  }
+]
+```
+
+Criterion 4, one real appeal with the log entry it left, one unknown id, and
+one empty reasoning, from `run_eval.py::run_appeals`:
+
+```json
+[
+  {
+    "case": "real",
+    "submit_status": 200,
+    "content_id": "c_2c0e9ccea4f0",
+    "appeal_status": 200,
+    "response": {
+      "appeal_recorded_at": "2026-11-10T03:39:19+00:00",
+      "content_id": "c_2c0e9ccea4f0",
+      "message": "Thanks, we've got your appeal. A person will review this piece. Until then it's marked as under review, not as AI-generated.",
+      "previous_guess": "ai",
+      "status": "under_review"
+    },
+    "appeal_entry": {
+      "content_id": "c_2c0e9ccea4f0",
+      "creator_id": "eval_appeal_t1_1",
+      "event": "appeal",
+      "reasoning": "I wrote this myself, in my own words. Please have a person look at it.",
+      "status": "under_review",
+      "timestamp": "2026-11-10T03:39:19+00:00"
+    }
+  },
+  {
+    "case": "unknown_id",
+    "content_id": "c_000000000000",
+    "appeal_status": 404,
+    "response": {
+      "error": "unknown_content_id",
+      "message": "We have no submission with content_id 'c_000000000000'. Check it against the one /submit gave you."
+    },
+    "appeal_entries_for_id": 0
+  },
+  {
+    "case": "empty_reasoning",
+    "content_id": "c_2c0e9ccea4f0",
+    "reasoning_sent": "",
+    "appeal_status": 400,
+    "response": {
+      "error": "missing_reasoning",
+      "message": "Tell us in a sentence or two why you think we got it wrong."
+    }
+  }
+]
+```
+
+Criterion 5, the body that isn't a JSON object and the 25,000-character text,
+with the log entry each left:
+
+```json
+[
+  {
+    "status": 400,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "error": "invalid_body",
+    "not_json": null,
+    "logged": [
+      {
+        "event": "rejected",
+        "status": "rejected",
+        "reason": "invalid_body",
+        "http_status": 400
+      }
+    ],
+    "sent": "raw body: [\"text\", \"creator_id\"]"
+  },
+  {
+    "status": 413,
+    "guess": null,
+    "confidence": null,
+    "model_score": null,
+    "style_score": null,
+    "label": null,
+    "error": "text_too_long",
+    "not_json": null,
+    "logged": [
+      {
+        "event": "rejected",
+        "status": "rejected",
+        "reason": "text_too_long",
+        "http_status": 413
+      }
+    ],
+    "sent": "word word word word word word word word word word word word word word "
+  }
+]
 ```
 
 **Diagnoses**
