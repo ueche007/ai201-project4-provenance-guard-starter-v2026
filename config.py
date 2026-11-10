@@ -94,7 +94,11 @@ VETO_BELOW = 0.5
 # I chose: let some AI through rather than accuse a writer.
 
 HUMAN_THRESHOLD = 0.45
-AI_THRESHOLD = 0.70
+# Unit 8 improvement: 0.70 -> 0.78. The attack run labelled four human pieces
+# AI (formal, second-language, rubric essay, technical docs) at 0.750-0.776.
+# 0.78 puts them in unsure. The cost: AI text scoring 0.70-0.78 is no longer
+# called AI. README, "The Improvement".
+AI_THRESHOLD = 0.78
 
 # ⚠️ One thing that catches people out in Milestone 5. A weighted average can
 # only land between its two inputs — so while `style_signal` is still the stub
