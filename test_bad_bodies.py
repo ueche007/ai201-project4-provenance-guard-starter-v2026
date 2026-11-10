@@ -38,6 +38,12 @@ def main():
     client = app.app.test_client()
     failures = 0
     for name, request_kwargs in CASES:
+        # These bodies have no creator_id, so they all count against one
+        # address, and the sixth would get a 429 from the unit 8 rate limit
+        # before reaching the route. This test is about the route, so start
+        # each case with fresh counts. `run_attacks.py --flood` tests the limit.
+        if hasattr(app.limiter, "reset"):
+            app.limiter.reset()
         before = len(audit.read_entries())
         response = client.post("/submit", **request_kwargs)
         body = response.get_json(silent=True) or {}
